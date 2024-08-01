@@ -16,7 +16,7 @@ public class Classification {
         teamList.sort((team1, team2) -> {
             int pointsComparison = Integer.compare(team2.getPoints(), team1.getPoints());
             if (pointsComparison == 0) {
-                return Integer.compare(team2.getSaldoGols(), team1.getSaldoGols());
+                return Integer.compare(team2.getGoalDifference(), team1.getGoalDifference());
             }
             return pointsComparison;
         });
@@ -28,7 +28,7 @@ public class Classification {
         }
 
         for (Map.Entry<Integer, Team> entry : classification.entrySet()) {
-            System.out.println("Rank: " + entry.getKey() + ", Team: " + entry.getValue().getName() + ", Points: " + entry.getValue().getPoints() + ", Saldo de Gols: " + entry.getValue().getSaldoGols());
+            System.out.println("Rank: " + entry.getKey() + ", Team: " + entry.getValue().getName() + ", Points: " + entry.getValue().getPoints() + ", Saldo de Gols: " + entry.getValue().getGoalDifference());
         }
 
         return classification;
