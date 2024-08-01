@@ -52,7 +52,7 @@ public class Match {
         }
     }
 
-    public Integer getSaldoGols() {
+    public Integer getSaldoGolsVencedor() {
         Team vencedor = vencedor();
 
         if (vencedor == null) {
@@ -62,6 +62,22 @@ public class Match {
         if (vencedor.equals(timeMandante)) {
             return golMandante - golVisitante;
         } else if (vencedor.equals(timeVisitante)) {
+            return golVisitante - golMandante;
+        }
+
+        return 0;
+    }
+
+    public Integer getSaldoGolsPerdedor() {
+        Team perdedor = perdedor();
+
+        if (perdedor == null) {
+            return 0;
+        }
+
+        if (perdedor.equals(timeMandante)) {
+            return golMandante - golVisitante;
+        } else if (perdedor.equals(timeVisitante)) {
             return golVisitante - golMandante;
         }
 
@@ -83,8 +99,8 @@ public class Match {
                 Integer rodada = Integer.parseInt(nextLine[2]);
                 Team timeMandante = new Team(nextLine[7]);
                 Team timeVisitante = new Team(nextLine[8]);
-                Integer golMandante = Integer.parseInt(nextLine[18]);
-                Integer golVisitante = Integer.parseInt(nextLine[19]);
+                Integer golMandante = Integer.parseInt(nextLine[17]);
+                Integer golVisitante = Integer.parseInt(nextLine[18]);
 
                 Match match = new Match(dataPartida, rodada, timeMandante, timeVisitante, golMandante, golVisitante);
                 matchList.add(match);

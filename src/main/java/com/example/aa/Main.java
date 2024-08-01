@@ -18,7 +18,9 @@ public class Main {
                 if (vencedor != null) {
                     if (team.getName().equals(vencedor.getName())) {
                         team.setPoints(3);
-                        team.setSaldoGols(match.getSaldoGols());
+                        team.setSaldoGols(match.getSaldoGolsVencedor());
+                    } else if (team.getName().equals(match.perdedor().getName())) {
+                        team.setSaldoGols(match.getSaldoGolsPerdedor());
                     }
                 } else {
                     if (team.getName().equals(match.getTimeMandante().getName())) {

@@ -23,7 +23,10 @@ public class Team {
     }
 
     public void setPoints(Integer points) {
-        this.points = points + this.points;
+        this.points += points;
+    }
+    public void setSaldoGols(Integer points) {
+        this.saldoGols += points;
     }
 
 
