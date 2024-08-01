@@ -95,10 +95,15 @@ public class MainGUI {
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu teamMenu = new JMenu("Gerenciar Times");
+        JMenu matchesMenu = new JMenu("Gerenciar Partidas");
+
+        JMenuItem addMatch = new JMenuItem("Adicionar Partida");
+        JMenuItem listMatches = new JMenuItem("Listar Partidas");
 
         JMenuItem addTeam = new JMenuItem("Adicionar Time");
         JMenuItem editTeam = new JMenuItem("Editar Time");
         JMenuItem purgeTeam = new JMenuItem("Remover Time");
+        JMenuItem listTeams = new JMenuItem("Listar Times");
 
         addTeam.addActionListener(e -> openAddTeamFrame());
         editTeam.addActionListener(e -> openEditTeamFrame());
@@ -107,7 +112,13 @@ public class MainGUI {
         teamMenu.add(addTeam);
         teamMenu.add(editTeam);
         teamMenu.add(purgeTeam);
+        teamMenu.add(listTeams);
+
+        matchesMenu.add(addMatch);
+        matchesMenu.add(listMatches);
+
         menuBar.add(teamMenu);
+        menuBar.add(matchesMenu);
 
         return menuBar;
     }
