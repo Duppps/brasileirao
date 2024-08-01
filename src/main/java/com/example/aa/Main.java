@@ -1,22 +1,41 @@
 package com.example.aa;
 
-import com.example.aa.Components.ReadCSV;
+import com.example.aa.Entities.Classification;
+import com.example.aa.Entities.Match;
+import com.example.aa.Entities.Team;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        List<Integer> columns = Arrays.asList(1, 2, 3, 4);
-        ReadCSV readCSV = new ReadCSV();
+    public static void main(String[] args) {
+        List<Match> matchList = Match.getAllMatches();
+        List<Team> allTeams = Team.generateAllTeams();
 
-        Map<Integer, List<String>> data = readCSV.readCSV(columns);
+        for (Match match : matchList) {
+            Team vencedor = match.vencedor();
 
-        data.forEach((rowIndex, rowValues) -> {
-            System.out.println("Linha " + rowIndex + ": " + rowValues);
+            for (Team team : allTeams) {
+                if (vencedor != null) {
+                    if (team.getName().equals(vencedor.getName())) {
+                        team.setPoints(3);
+                        team.setSaldoGols(match.getSaldoGols());
+                    }
+                } else {
+                    if (team.getName().equals(match.getTimeMandante().getName())) {
+                        team.setPoints(1);
+                    }
+                    if (team.getName().equals(match.getTimeVisitante().getName())) {
+                        team.setPoints(1);
+                    }
+                }
+            }
+        }
+
+        Classification classification = new Classification();
+        Map<Integer, Team> rankedTeams = classification.getClassification(allTeams);
+
+        rankedTeams.forEach((position, team) -> {
+            //System.out.println("Position: " + position + ", Team: " + team.getName() + ", Points: " + team.getPoints());
         });
     }
 }
