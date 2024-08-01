@@ -1,6 +1,7 @@
 package com.example.aa.GUI;
 
 import com.example.aa.Components.DateLabelFormatter;
+import com.example.aa.Entities.Match;
 import com.example.aa.Entities.Team;
 import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -15,6 +16,7 @@ import java.util.Properties;
 
 public class MainGUI {
     private List<Team> teamList;
+    private List<Match> matchList;
     private JComboBox<Team> selectTeamMandante;
     private JComboBox<Team> selectTeamVisitante;
     private JTextField golsMandanteField;
@@ -77,7 +79,7 @@ public class MainGUI {
         panel.add(golsVisitanteField);
 
         frame.add(panel, BorderLayout.NORTH);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Adiciona margem
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 
         Object[][] obj = new Object[0][10];
@@ -108,6 +110,10 @@ public class MainGUI {
         addTeam.addActionListener(e -> openAddTeamFrame());
         editTeam.addActionListener(e -> openEditTeamFrame());
         purgeTeam.addActionListener(e -> openPurgeTeamFrame());
+        listTeams.addActionListener(e -> openListTeamsFrame());
+
+        addMatch.addActionListener(e -> openAddMatchesFrame());
+        listMatches.addActionListener(e -> openEditMatchesFrame());
 
         teamMenu.add(addTeam);
         teamMenu.add(editTeam);
@@ -137,6 +143,24 @@ public class MainGUI {
 
     private void openPurgeTeamFrame() {
         JDialog teamFrame = new TeamPurgeGUI(teamList, this);
+        teamFrame.setSize(300, 200);
+        teamFrame.setVisible(true);
+    }
+
+    private void openListTeamsFrame() {
+        JDialog teamFrame = new TeamAddGUI(teamList, this);
+        teamFrame.setSize(300, 200);
+        teamFrame.setVisible(true);
+    }
+
+    private void openAddMatchesFrame() {
+        JDialog teamFrame = new MatchAddGUI(matchList, this);
+        teamFrame.setSize(300, 200);
+        teamFrame.setVisible(true);
+    }
+
+    private void openEditMatchesFrame() {
+        JDialog teamFrame = new TeamAddGUI(teamList, this);
         teamFrame.setSize(300, 200);
         teamFrame.setVisible(true);
     }

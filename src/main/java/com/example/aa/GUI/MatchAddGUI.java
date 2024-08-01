@@ -1,30 +1,23 @@
 package com.example.aa.GUI;
 
-import com.example.aa.Entities.Team;
+import com.example.aa.Entities.Match;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.List;
 
-public class TeamAddGUI extends JDialog {
+public class MatchAddGUI extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField jtTeamName;
-    private JTextField jtStadiumName;
-    private JTextField jtCityName;
-    private List<Team> teamList;
+    private List<Match> matchList;
     private MainGUI mainGUI;
 
-    public TeamAddGUI(List<Team> teamList, MainGUI mainGUI) {
-        this.teamList = teamList;
+    public MatchAddGUI(List<Match> matchList, MainGUI mainGUI) {
+        this.matchList = matchList;
         this.mainGUI = mainGUI;
         setContentPane(contentPane);
-        setTitle("Adicionar Time");
+        setTitle("Adicionar Partida");
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
@@ -40,7 +33,6 @@ public class TeamAddGUI extends JDialog {
             }
         });
 
-        // Call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -48,7 +40,6 @@ public class TeamAddGUI extends JDialog {
             }
         });
 
-        // Call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -57,9 +48,6 @@ public class TeamAddGUI extends JDialog {
     }
 
     private void onOK() {
-        Team team = new Team(jtTeamName.getText(), jtStadiumName.getText(), jtCityName.getText());
-        teamList.add(team);
-        mainGUI.updateTeamList(teamList); // Atualiza a lista no MainGUI
         dispose();
     }
 
