@@ -84,32 +84,32 @@ public class Match {
         return 0;
     }
 
-    public static List<Match> getAllMatches() {
-        List<Match> matchList = new ArrayList<>();
-        String csvFile = "src/main/resources/brasileirao_2022.csv";
-
-        try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
-            String[] nextLine;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            reader.readNext();
-
-            while ((nextLine = reader.readNext()) != null) {
-                Date dataPartida = dateFormat.parse(nextLine[1]);
-                Integer rodada = Integer.parseInt(nextLine[2]);
-                Team timeMandante = new Team(nextLine[7]);
-                Team timeVisitante = new Team(nextLine[8]);
-                Integer golMandante = Integer.parseInt(nextLine[17]);
-                Integer golVisitante = Integer.parseInt(nextLine[18]);
-
-                Match match = new Match(dataPartida, rodada, timeMandante, timeVisitante, golMandante, golVisitante);
-                matchList.add(match);
-            }
-        } catch (IOException | CsvValidationException | ParseException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-        return matchList;
-    }
+//    public static List<Match> getAllMatches() {
+//        List<Match> matchList = new ArrayList<>();
+//        String csvFile = "src/main/resources/brasileirao_2022.csv";
+//
+//        try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
+//            String[] nextLine;
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//
+//            reader.readNext();
+//
+//            while ((nextLine = reader.readNext()) != null) {
+//                Date dataPartida = dateFormat.parse(nextLine[1]);
+//                Integer rodada = Integer.parseInt(nextLine[2]);
+//                Team timeMandante = new Team(nextLine[7]);
+//                Team timeVisitante = new Team(nextLine[8]);
+//                Integer golMandante = Integer.parseInt(nextLine[17]);
+//                Integer golVisitante = Integer.parseInt(nextLine[18]);
+//
+//                Match match = new Match(dataPartida, rodada, timeMandante, timeVisitante, golMandante, golVisitante);
+//                matchList.add(match);
+//            }
+//        } catch (IOException | CsvValidationException | ParseException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//
+//        return matchList;
+//    }
 }

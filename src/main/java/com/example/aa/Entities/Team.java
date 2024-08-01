@@ -15,11 +15,21 @@ import java.util.Objects;
 @Setter
 public class Team {
     private String name;
+    private String stadium;
+    private String city;
     private Integer points = 0;
     private Integer saldoGols = 0;
+    private Integer wins = 0;
+    private Integer defeats = 0;
+    private Integer draws = 0;
+    private Integer goalsScored = 0;
+    private Integer goalsConceded = 0;
+    private Integer utilization = 0;
 
-    public Team(String name) {
+    public Team(String name, String stadium, String city) {
         this.name = name;
+        this.city = city;
+        this.stadium = stadium;
     }
 
     public void setPoints(Integer points) {
@@ -29,52 +39,7 @@ public class Team {
         this.saldoGols += points;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Team team = (Team) o;
-        return name.equals(team.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
-    }
-
-    public static Boolean verifyIfTeamExists(List<Team> teamList, Team team) {
-        boolean teamExists = false;
-        for (Team t : teamList) {
-            if (t.getName().equals(team.getName())) {
-                teamExists = true;
-                break;
-            }
-        }
-
-        return teamExists;
-    }
-
-    public static List<Team> generateAllTeams() {
-        String csvFile = "src/main/resources/brasileirao_2022.csv";
-        List<Team> list = new ArrayList<>();
-
-        try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
-            String[] nextLine;
-            reader.readNext();
-
-            while ((nextLine = reader.readNext()) != null) {
-                Team team = new Team(nextLine[7]);
-                if (!list.contains(team)) {
-                    list.add(team);
-                }
-            }
-
-        } catch (IOException | CsvValidationException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-        return list;
+    public String toString() {
+        return this.name;
     }
 }
