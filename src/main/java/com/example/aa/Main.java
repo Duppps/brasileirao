@@ -11,10 +11,11 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         List<Team> allTeams = new ArrayList<>();
+        List<Match> allMatches = new ArrayList<>();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainGUI(allTeams);
+                new MainGUI(allTeams, allMatches);
             }
         });
 

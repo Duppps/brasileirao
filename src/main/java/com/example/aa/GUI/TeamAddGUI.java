@@ -40,7 +40,6 @@ public class TeamAddGUI extends JDialog {
             }
         });
 
-        // Call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -48,7 +47,6 @@ public class TeamAddGUI extends JDialog {
             }
         });
 
-        // Call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -59,7 +57,7 @@ public class TeamAddGUI extends JDialog {
     private void onOK() {
         Team team = new Team(jtTeamName.getText(), jtStadiumName.getText(), jtCityName.getText());
         teamList.add(team);
-        mainGUI.updateTeamList(teamList); // Atualiza a lista no MainGUI
+        mainGUI.updateTeamList(teamList);
         dispose();
     }
 

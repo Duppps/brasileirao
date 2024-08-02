@@ -1,33 +1,26 @@
 package com.example.aa.GUI;
 
-import com.example.aa.Components.DateLabelFormatter;
 import com.example.aa.Entities.Match;
 import com.example.aa.Entities.Team;
 import org.jdatepicker.JDatePicker;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-import java.util.Properties;
 
 public class MainGUI {
     private List<Team> teamList;
     private List<Match> matchList;
     private JComboBox<Team> selectTeamMandante;
     private JComboBox<Team> selectTeamVisitante;
-    private JTextField golsMandanteField;
-    private JTextField golsVisitanteField;
     private JDatePicker datePicker;
     private Elements elements = new Elements();
     private JTable tableClassification;
-    private boolean isUpdating = false;
 
-    public MainGUI(List<Team> teamList) {
+    public MainGUI(List<Team> teamList, List<Match> matchList) {
         this.teamList = teamList;
+        this.matchList = matchList;
 
         JFrame frame = new JFrame("Main GUI");
         JPanel panel = new JPanel();
@@ -37,56 +30,15 @@ public class MainGUI {
         JMenuBar menuBar = createMenuBar();
         frame.setJMenuBar(menuBar);
 
-        JLabel jlTeamMandante = new JLabel("Time Mandante");
-        selectTeamMandante = elements.createTeamsSelect(teamList);
-        JLabel jlTeamVisitante = new JLabel("Time Visitante");
-        selectTeamVisitante = elements.createTeamsSelect(teamList);
-        JLabel jlDate = new JLabel("Data da Partida");
-        JLabel jlGolsMandante = new JLabel("Gols Mandante");
-        JLabel jlGolsVisitante = new JLabel("Gols Visitante");
-
-        golsMandanteField = new JTextField(10);
-        golsVisitanteField = new JTextField(10);
-
-        selectTeamMandante.addItemListener(e -> {
-            if (!isUpdating) {
-                updateVisitanteComboBox();
-            }
-        });
-        selectTeamVisitante.addItemListener(e -> {
-            if (!isUpdating) {
-                updateMandanteComboBox();
-            }
-        });
-
-        UtilDateModel model = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Hoje");
-        p.put("text.month", "Mês");
-        p.put("text.year", "Ano");
-        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-
-        panel.add(jlTeamMandante);
-        panel.add(selectTeamMandante);
-        panel.add(jlTeamVisitante);
-        panel.add(selectTeamVisitante);
-        panel.add(jlDate);
-        panel.add((Component) datePicker);
-        panel.add(jlGolsMandante);
-        panel.add(golsMandanteField);
-        panel.add(jlGolsVisitante);
-        panel.add(golsVisitanteField);
-
         frame.add(panel, BorderLayout.NORTH);
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
         Object[][] obj = new Object[0][10];
         String[] columns = {"Rank", "Nome", "Pontos", "Saldo de gols", "Vitórias", "Empates", "Derrotas", "Gols Marcados", "Gols Sofridos", "Aproveitamento"};
         tableClassification = elements.createTable("Classificação", obj, columns);
 
         JScrollPane scrollPane = new JScrollPane(tableClassification);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         frame.add(scrollPane, BorderLayout.CENTER);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,20 +57,20 @@ public class MainGUI {
         JMenuItem addTeam = new JMenuItem("Adicionar Time");
         JMenuItem editTeam = new JMenuItem("Editar Time");
         JMenuItem purgeTeam = new JMenuItem("Remover Time");
-        JMenuItem listTeams = new JMenuItem("Listar Times");
+        JMenuItem listTeamsMatches = new JMenuItem("Listar Partidas");
 
         addTeam.addActionListener(e -> openAddTeamFrame());
         editTeam.addActionListener(e -> openEditTeamFrame());
         purgeTeam.addActionListener(e -> openPurgeTeamFrame());
-        listTeams.addActionListener(e -> openListTeamsFrame());
+        listTeamsMatches.addActionListener(e -> openListTeamsFrame());
 
         addMatch.addActionListener(e -> openAddMatchesFrame());
-        listMatches.addActionListener(e -> openEditMatchesFrame());
+        listMatches.addActionListener(e -> openListMatchesFrame());
 
         teamMenu.add(addTeam);
         teamMenu.add(editTeam);
         teamMenu.add(purgeTeam);
-        teamMenu.add(listTeams);
+        teamMenu.add(listTeamsMatches);
 
         matchesMenu.add(addMatch);
         matchesMenu.add(listMatches);
@@ -148,33 +100,45 @@ public class MainGUI {
     }
 
     private void openListTeamsFrame() {
-        JDialog teamFrame = new TeamAddGUI(teamList, this);
+        JDialog teamFrame = new TeamMatchesListGUI(teamList, matchList);
+        teamFrame.setTitle("Lista de Partidas");
         teamFrame.setSize(300, 200);
         teamFrame.setVisible(true);
     }
 
     private void openAddMatchesFrame() {
-        JDialog teamFrame = new MatchAddGUI(matchList, this);
-        teamFrame.setSize(300, 200);
+        JDialog teamFrame = new MatchAddGUI(matchList, teamList, this);
+        teamFrame.setSize(450, 330);
         teamFrame.setVisible(true);
     }
 
-    private void openEditMatchesFrame() {
-        JDialog teamFrame = new TeamAddGUI(teamList, this);
-        teamFrame.setSize(300, 200);
+    private void openListMatchesFrame() {
+        JDialog teamFrame = new MatchListGUI(matchList);
+        teamFrame.setSize(550, 450);
         teamFrame.setVisible(true);
     }
 
     public void updateTeamList(List<Team> updatedTeamList) {
         this.teamList = updatedTeamList;
-        selectTeamMandante.removeAllItems();
-        for (Team team : teamList) {
-            selectTeamMandante.addItem(team);
-        }
         updateTable();
     }
 
-    private void updateTable() {
+    public void updateMatchList(List<Match> matches) {
+        this.matchList = matches;
+
+        updateTable();
+    }
+
+    public void updateTable() {
+        teamList.sort((team1, team2) -> {
+            int pointsComparison = team2.getPoints().compareTo(team1.getPoints());
+            if (pointsComparison != 0) {
+                return pointsComparison;
+            }
+
+            return team2.getGoalDifference().compareTo(team1.getGoalDifference());
+        });
+
         Object[][] data = new Object[teamList.size()][10];
         for (int i = 0; i < teamList.size(); i++) {
             Team team = teamList.get(i);
@@ -187,33 +151,21 @@ public class MainGUI {
             data[i][6] = team.getLosses();
             data[i][7] = team.getGoalsScored();
             data[i][8] = team.getGoalsConceded();
-            data[i][9] = team.getPerformance();
+            data[i][9] = team.getPerformance() + "%";
         }
+
         DefaultTableModel model = (DefaultTableModel) tableClassification.getModel();
         model.setDataVector(data, new String[]{"Rank", "Nome", "Pontos", "Saldo de gols", "Vitórias", "Empates", "Derrotas", "Gols Marcados", "Gols Sofridos", "Aproveitamento"});
     }
 
-    private void updateVisitanteComboBox() {
-        isUpdating = true;
-        Team selectedMandante = (Team) selectTeamMandante.getSelectedItem();
-        selectTeamVisitante.removeAllItems();
-        for (Team team : teamList) {
-            if (team != selectedMandante) {
-                selectTeamVisitante.addItem(team);
-            }
+    public void updateTeamPoints(Team teamMandante, Team teamVisitante, Integer golsMandante, Integer golsVisitante) {
+        if (teamMandante == null || teamVisitante == null) {
+            return;
         }
-        isUpdating = false;
-    }
 
-    private void updateMandanteComboBox() {
-        isUpdating = true;
-        Team selectedVisitante = (Team) selectTeamVisitante.getSelectedItem();
-        selectTeamMandante.removeAllItems();
-        for (Team team : teamList) {
-            if (team != selectedVisitante) {
-                selectTeamMandante.addItem(team);
-            }
-        }
-        isUpdating = false;
+        teamMandante.updateGoals(golsMandante, golsVisitante);
+        teamVisitante.updateGoals(golsVisitante, golsMandante);
+
+        updateTable();
     }
 }
