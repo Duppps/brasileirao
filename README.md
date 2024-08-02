@@ -1,4 +1,4 @@
-<h4>Brazilian League Table Simulation</h4>
+<h3 style="border-top: 1px solid gray;">Brazilian League Table Simulation</h3>
 
 <p>This repository provides a simulation of a Brazilian football league table, allowing users to track and manage football teams, matches, and league standings.</p>
 
