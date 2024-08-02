@@ -52,9 +52,9 @@ public class MatchAddGUI extends JDialog {
         JLabel jlGolsVisitante = new JLabel("Gols Visitante");
 
         golsMandanteField = new JTextField();
-        golsMandanteField.setPreferredSize(inputSize); // Define o tamanho fixo
+        golsMandanteField.setPreferredSize(inputSize);
         golsVisitanteField = new JTextField();
-        golsVisitanteField.setPreferredSize(inputSize); // Define o tamanho fixo
+        golsVisitanteField.setPreferredSize(inputSize);
 
         ((AbstractDocument) golsMandanteField.getDocument()).setDocumentFilter(new NumberOnlyFilter());
         ((AbstractDocument) golsVisitanteField.getDocument()).setDocumentFilter(new NumberOnlyFilter());
@@ -69,6 +69,8 @@ public class MatchAddGUI extends JDialog {
                 updateMandanteComboBox();
             }
         });
+
+        updateVisitanteComboBox();
 
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
@@ -193,26 +195,51 @@ public class MatchAddGUI extends JDialog {
     }
 
     private void updateVisitanteComboBox() {
+        if (isUpdating) return;
         isUpdating = true;
+
         Team selectedMandante = (Team) selectTeamMandante.getSelectedItem();
+        Team previousSelection = (Team) selectTeamVisitante.getSelectedItem();
+
         selectTeamVisitante.removeAllItems();
-        for (Team team : this.teamList) {
-            if (team != selectedMandante) {
+
+        for (Team team : teamList) {
+            if (!team.equals(selectedMandante)) {
                 selectTeamVisitante.addItem(team);
             }
         }
+
+        if (previousSelection != null && !previousSelection.equals(selectedMandante)) {
+            selectTeamVisitante.setSelectedItem(previousSelection);
+        } else if (selectTeamVisitante.getItemCount() > 0) {
+            selectTeamVisitante.setSelectedIndex(0);
+        }
+
         isUpdating = false;
     }
 
     private void updateMandanteComboBox() {
+        if (isUpdating) return;
         isUpdating = true;
+
         Team selectedVisitante = (Team) selectTeamVisitante.getSelectedItem();
+        Team previousSelection = (Team) selectTeamMandante.getSelectedItem();
+
         selectTeamMandante.removeAllItems();
-        for (Team team : this.teamList) {
-            if (team != selectedVisitante) {
+
+        for (Team team : teamList) {
+            if (!team.equals(selectedVisitante)) {
                 selectTeamMandante.addItem(team);
             }
         }
+
+        if (previousSelection != null && !previousSelection.equals(selectedVisitante)) {
+            selectTeamMandante.setSelectedItem(previousSelection);
+        } else if (selectTeamMandante.getItemCount() > 0) {
+            selectTeamMandante.setSelectedIndex(0);
+        }
+
         isUpdating = false;
     }
+
 }

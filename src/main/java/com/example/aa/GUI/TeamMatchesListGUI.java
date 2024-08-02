@@ -43,13 +43,14 @@ public class TeamMatchesListGUI extends JDialog {
                         match.getTimeVisitante().equals(selectedTeam))
                 .map(match -> new Object[]{
                         formatDate(match.getDataPartida()),
+                        match.getTimeMandante(),
                         match.getGolMandante(),
                         match.getTimeVisitante().getName(),
                         match.getGolVisitante()
                 })
                 .toArray(Object[][]::new);
 
-        DefaultTableModel model = new DefaultTableModel(data, new String[]{"Data", "Gols Time Mandante", "Adversário", "Gols Adversário"});
+        DefaultTableModel model = new DefaultTableModel(data, new String[]{"Data", "Time Mandante", "Gols Time Mandante", "Visitante", "Gols Visitante"});
         tableMatches.setModel(model);
     }
 

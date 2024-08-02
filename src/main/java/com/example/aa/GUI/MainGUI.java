@@ -17,6 +17,7 @@ public class MainGUI {
     private JDatePicker datePicker;
     private Elements elements = new Elements();
     private JTable tableClassification;
+    private JFrame mainGUI;
 
     public MainGUI(List<Team> teamList, List<Match> matchList) {
         this.teamList = teamList;
@@ -42,8 +43,14 @@ public class MainGUI {
         frame.add(scrollPane, BorderLayout.CENTER);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+
+        frame.pack();
+
+        frame.setLocationRelativeTo(null);
+
         frame.setVisible(true);
+
+        this.mainGUI = frame;
     }
 
     private JMenuBar createMenuBar() {
@@ -84,18 +91,21 @@ public class MainGUI {
     private void openAddTeamFrame() {
         JDialog teamFrame = new TeamAddGUI(teamList, this);
         teamFrame.setSize(300, 200);
+        teamFrame.setLocationRelativeTo(mainGUI);
         teamFrame.setVisible(true);
     }
 
     private void openEditTeamFrame() {
         JDialog teamFrame = new TeamEditGUI(teamList, this);
         teamFrame.setSize(300, 200);
+        teamFrame.setLocationRelativeTo(mainGUI);
         teamFrame.setVisible(true);
     }
 
     private void openPurgeTeamFrame() {
         JDialog teamFrame = new TeamPurgeGUI(teamList, this);
         teamFrame.setSize(300, 200);
+        teamFrame.setLocationRelativeTo(mainGUI);
         teamFrame.setVisible(true);
     }
 
@@ -103,18 +113,21 @@ public class MainGUI {
         JDialog teamFrame = new TeamMatchesListGUI(teamList, matchList);
         teamFrame.setTitle("Lista de Partidas");
         teamFrame.setSize(300, 200);
+        teamFrame.setLocationRelativeTo(mainGUI);
         teamFrame.setVisible(true);
     }
 
     private void openAddMatchesFrame() {
         JDialog teamFrame = new MatchAddGUI(matchList, teamList, this);
         teamFrame.setSize(450, 330);
+        teamFrame.setLocationRelativeTo(mainGUI);
         teamFrame.setVisible(true);
     }
 
     private void openListMatchesFrame() {
         JDialog teamFrame = new MatchListGUI(matchList);
         teamFrame.setSize(550, 450);
+        teamFrame.setLocationRelativeTo(mainGUI);
         teamFrame.setVisible(true);
     }
 
@@ -125,7 +138,6 @@ public class MainGUI {
 
     public void updateMatchList(List<Match> matches) {
         this.matchList = matches;
-
         updateTable();
     }
 
@@ -135,7 +147,6 @@ public class MainGUI {
             if (pointsComparison != 0) {
                 return pointsComparison;
             }
-
             return team2.getGoalDifference().compareTo(team1.getGoalDifference());
         });
 

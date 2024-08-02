@@ -48,7 +48,6 @@ public class TeamEditGUI extends JDialog {
         jtCityName = new JTextField();
         inputPanel.add(jtCityName);
 
-        // Add components to content pane
         JPanel northPanel = new JPanel();
         northPanel.add(lblSelectTeam);
         northPanel.add(selectTeam);
@@ -62,7 +61,6 @@ public class TeamEditGUI extends JDialog {
         buttonPanel.add(buttonCancel);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Add action listeners
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
@@ -82,14 +80,12 @@ public class TeamEditGUI extends JDialog {
             }
         });
 
-        // Call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        // Populate fields with selected team data
         if (selectTeam.getSelectedItem() != null) {
             populateFields((Team) selectTeam.getSelectedItem());
         }
