@@ -1,21 +1,32 @@
 package com.example.aa;
 
+import com.example.aa.Components.ReadCSV;
 import com.example.aa.Entities.Classification;
 import com.example.aa.Entities.Match;
 import com.example.aa.Entities.Team;
 import com.example.aa.GUI.MainGUI;
+import com.opencsv.CSVReader;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws FileNotFoundException {
         List<Team> allTeams = new ArrayList<>();
         List<Match> allMatches = new ArrayList<>();
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainGUI(allTeams, allMatches);
+                try {
+                    new MainGUI(allTeams, allMatches);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 

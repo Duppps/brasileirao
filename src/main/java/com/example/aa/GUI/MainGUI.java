@@ -1,5 +1,6 @@
 package com.example.aa.GUI;
 
+import com.example.aa.Components.ReadCSV;
 import com.example.aa.Entities.Match;
 import com.example.aa.Entities.Team;
 import org.jdatepicker.JDatePicker;
@@ -7,7 +8,13 @@ import org.jdatepicker.JDatePicker;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class MainGUI {
     private List<Team> teamList;
@@ -19,9 +26,13 @@ public class MainGUI {
     private JTable tableClassification;
     private JFrame mainGUI;
 
-    public MainGUI(List<Team> teamList, List<Match> matchList) {
+    public MainGUI(List<Team> teamList, List<Match> matchList) throws FileNotFoundException {
         this.teamList = teamList;
         this.matchList = matchList;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        List<Integer> csvColumns = Arrays.asList(1, 3, 7, 8, 17, 18);
+        ReadCSV csvReader = new ReadCSV();
+        Map<Integer, List<String>> csvData = csvReader.readColumns(csvColumns);
 
         JFrame frame = new JFrame("Main GUI");
         JPanel panel = new JPanel();
@@ -51,6 +62,35 @@ public class MainGUI {
         frame.setVisible(true);
 
         this.mainGUI = frame;
+
+        csvData.forEach((i, a) -> {
+            String teamName = a.get(2);
+            boolean teamExists = teamList.stream().anyMatch(team -> team.getName().equals(teamName));
+
+            if (!teamExists) {
+                Team newTeam = new Team(a.get(2), a.get(1), "empty");
+                teamList.add(newTeam);
+            }
+        });
+
+        csvData.forEach((i, d) -> {
+            Team timeMandante = teamList.stream().filter(team -> team.getName().equals(d.get(2))).findFirst().orElse(null);
+            Team timeVisitante = teamList.stream().filter(team -> team.getName().equals(d.get(3))).findFirst().orElse(null);
+
+            try {
+                Date matchDate = dateFormat.parse(d.get(0));
+                if (timeMandante != null && timeVisitante != null) {
+                    Match match = new Match(matchDate, timeMandante, timeVisitante, Integer.valueOf(d.get(4)), Integer.valueOf(d.get(5)));
+                    matchList.add(match);
+
+                    updateTeamPoints(timeMandante, timeVisitante, Integer.valueOf(d.get(4)), Integer.valueOf(d.get(5)));
+                }
+            } catch (ParseException e) {
+                System.out.println("Erro ao converter a data: " + e.getMessage());
+            }
+        });
+
+        updateTable();
     }
 
     private JMenuBar createMenuBar() {
