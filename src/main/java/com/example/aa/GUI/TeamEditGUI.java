@@ -24,9 +24,11 @@ public class TeamEditGUI extends JDialog {
 
         setTitle("Editar Time");
         setModal(true);
-        setContentPane(contentPane);
-        getRootPane().setDefaultButton(buttonOK);
-        setLayout(new BorderLayout());
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+
+        contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout());
 
         JLabel lblSelectTeam = new JLabel("Selecione o Time: ");
         selectTeam = new JComboBox<>(teamList.toArray(new Team[0]));
@@ -38,10 +40,10 @@ public class TeamEditGUI extends JDialog {
         });
 
         JPanel inputPanel = new JPanel(new GridLayout(4, 2));
-        inputPanel.add(new JLabel("Nome do Time: "));
+        inputPanel.add(new JLabel("Nome: "));
         jtTeamName = new JTextField();
         inputPanel.add(jtTeamName);
-        inputPanel.add(new JLabel("Nome do Estádio: "));
+        inputPanel.add(new JLabel("Estádio: "));
         jtStadiumName = new JTextField();
         inputPanel.add(jtStadiumName);
         inputPanel.add(new JLabel("Cidade: "));
@@ -51,15 +53,19 @@ public class TeamEditGUI extends JDialog {
         JPanel northPanel = new JPanel();
         northPanel.add(lblSelectTeam);
         northPanel.add(selectTeam);
-        add(northPanel, BorderLayout.NORTH);
-        add(inputPanel, BorderLayout.CENTER);
+        contentPane.add(northPanel, BorderLayout.NORTH);
+        contentPane.add(inputPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
         buttonOK = new JButton("OK");
-        buttonCancel = new JButton("Cancel");
+        buttonCancel = new JButton("Cancelar");
         buttonPanel.add(buttonOK);
         buttonPanel.add(buttonCancel);
-        add(buttonPanel, BorderLayout.SOUTH);
+        contentPane.add(buttonPanel, BorderLayout.SOUTH);
+
+        setContentPane(contentPane);
+
+        getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

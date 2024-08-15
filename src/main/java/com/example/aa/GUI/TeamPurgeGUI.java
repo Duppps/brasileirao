@@ -14,9 +14,6 @@ public class TeamPurgeGUI extends JDialog {
     private List<Team> teamList;
     private MainGUI mainGUI;
     private JComboBox<Team> selectTeam;
-    private JTextField jtTeamName;
-    private JTextField jtStadiumName;
-    private JTextField jtCityName;
 
     public TeamPurgeGUI(List<Team> teamList, MainGUI mainGUI) {
         this.teamList = teamList;
@@ -24,25 +21,30 @@ public class TeamPurgeGUI extends JDialog {
 
         setTitle("Remover Time");
         setModal(true);
-        setContentPane(contentPane);
-        getRootPane().setDefaultButton(buttonOK);
-        setLayout(new BorderLayout());
+        setSize(300, 200);
+        setLocationRelativeTo(null);
 
-        JLabel lblSelectTeam = new JLabel("Selecione o Time: ");
+        contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout());
+
+        JLabel lblSelectTeam = new JLabel("Time: ");
         selectTeam = new JComboBox<>(teamList.toArray(new Team[0]));
 
         JPanel northPanel = new JPanel();
         northPanel.add(lblSelectTeam);
         northPanel.add(selectTeam);
-        add(northPanel, BorderLayout.NORTH);
+        contentPane.add(northPanel, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel();
-        buttonOK = new JButton("OK");
-        buttonCancel = new JButton("Cancel");
+        buttonOK = new JButton("Remover");
+        buttonCancel = new JButton("Cancelar");
         buttonPanel.add(buttonOK);
         buttonPanel.add(buttonCancel);
-        add(buttonPanel, BorderLayout.SOUTH);
+        contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
+        setContentPane(contentPane);
+
+        getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -63,7 +65,6 @@ public class TeamPurgeGUI extends JDialog {
             }
         });
 
-        // Call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
