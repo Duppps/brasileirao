@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class TeamController {
-
     @GetMapping("/team")
     public String teamPage(Model model) {
         model.addAttribute("title", "Página de Exemplo");
         model.addAttribute("message", "Bem-vindo ao exemplo de Spring MVC com Thymeleaf!");
-        return "team";
+        return "pages/team";
     }
 }

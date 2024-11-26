@@ -10,9 +10,15 @@ import lombok.Setter;
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String stadium;
 }

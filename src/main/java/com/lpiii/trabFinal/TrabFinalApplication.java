@@ -21,6 +21,8 @@ public class TrabFinalApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Team gremio = new Team();
 		gremio.setName("Grêmio");
+		gremio.setCity("Porto Alegre");
+		gremio.setStadium("Arena");
 		teamRepository.save(gremio);
 
 		System.out.println("Team saved: " + gremio.getName());

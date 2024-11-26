@@ -5,7 +5,6 @@
     <title th:text="${title}">Título</title>
 </head>
 <body>
-<h1 th:text="${title}">Título da Página</h1>
-<p th:text="${message}">Mensagem</p>
+<header th:replace="~{fragments/header :: header}"></header>
 </body>
 </html>
