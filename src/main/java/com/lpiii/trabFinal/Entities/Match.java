@@ -7,12 +7,9 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Team {
+public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
 }
