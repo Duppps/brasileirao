@@ -1,12 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title th:text="${title}">Título</title>
-    </head>
-    <body>
-        <header th:replace="~{fragments/header :: header}"></header>
-        <h1 th:text="${title}">Título da Página</h1>
-        <p th:text="${message}">Mensagem</p>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: section}">
+    <section>
+        <h1>Times</h1>
+        <p>Lista de times disponíveis.</p>
+    </section>
 </html>
