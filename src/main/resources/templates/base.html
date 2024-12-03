@@ -5,12 +5,7 @@
         <meta charset="UTF-8">
     </head>
     <body>
-        <header th:replace="fragments/header"></header>
-        <main layout:fragment="content">
-            <p>Bem-vindo!</p>
-        </main>
-        <footer>
-            <p>Rodapé Base</p>
-        </footer>
+        <div th:replace="~{fragments/header}"></div>
+        <main layout:fragment="content"></main>
     </body>
 </html>
