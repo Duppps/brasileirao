@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: section}">
-    <section>
-        <h1>Times</h1>
-        <p>Lista de times disponíveis.</p>
-    </section>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="base">
+    <head>
+        <title>Times</title>
+    </head>
+    <body>
+        <section layout:fragment="content">
+            <h1>Times</h1>
+            <p>Lista de times disponíveis.</p>
+        </section>
+    </body>
 </html>

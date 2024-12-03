@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title layout:title-pattern="Site :: [Title]">Base Template</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <header th:replace="fragments/header"></header>
+        <main layout:fragment="content">
+            <p>Bem-vindo!</p>
+        </main>
+        <footer>
+            <p>Rodapé Base</p>
+        </footer>
+    </body>
+</html>
