@@ -1,4 +1,23 @@
+.header {
+    widht: 100%;
+    background-color: #0f7012;
+    padding: 10px;
+}
+
 .menu {
-    display: inline;
-    background-color: red;
+    display: flex;
+    list-style: none;
+}
+
+.menu li {
+    margin: 0 5px;
+}
+
+.menu li a {
+    color: #f7f7f7;
+    text-decoration: none;
+}
+
+.menu li a:hover {
+    color: #cccccc;
 }
