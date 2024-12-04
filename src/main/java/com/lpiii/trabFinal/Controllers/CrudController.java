@@ -1,6 +1,6 @@
 package com.lpiii.trabFinal.Controllers;
 
-import com.lpiii.trabFinal.Entities.TableData;
+import com.lpiii.trabFinal.Utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -23,21 +23,16 @@ public class CrudController {
     private static final String ENTITY_PACKAGE = "com.lpiii.trabFinal.Entities";
 
     @Autowired
-    private ApplicationContext applicationContext; // Contexto do Spring para obter beans dinamicamente
+    private ApplicationContext applicationContext;
 
     @GetMapping("/{entity}")
     public String handleEntity(@PathVariable String entity, Model model) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        // Obter a classe da entidade
         Class<?> entityClass = getClassForEntity(entity);
-
-        // Obter o repositório dinamicamente
         Object repository = getRepositoryForEntity(entity);
 
-        // Obter colunas e dados
         List<String> columns = getColumnsForEntity(entityClass);
         List<Map<String, Object>> rows = getRowsForEntity(repository);
 
-        // Adicionar ao modelo
         model.addAttribute("entityName", entity);
         model.addAttribute("tableData", new TableData(columns, rows));
 
@@ -50,8 +45,8 @@ public class CrudController {
     }
 
     private Object getRepositoryForEntity(String entity) {
-        String beanName = capitalize(entity) + "Repository";
-        return applicationContext.getBean(beanName); // Obter o bean pelo nome
+        String beanName = entity.toLowerCase() + "Repository";
+        return applicationContext.getBean(beanName);
     }
 
     private List<String> getColumnsForEntity(Class<?> entityClass) {
@@ -64,16 +59,15 @@ public class CrudController {
 
     @SuppressWarnings("unchecked")
     private List<Map<String, Object>> getRowsForEntity(Object repository) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        // Chamar o método findAll() no repositório
         List<?> entities = (List<?>) repository.getClass().getMethod("findAll").invoke(repository);
 
         List<Map<String, Object>> rows = new ArrayList<>();
         for (Object entity : entities) {
             Map<String, Object> row = new HashMap<>();
             for (Field field : entity.getClass().getDeclaredFields()) {
-                field.setAccessible(true); // Permitir acesso a campos privados
+                field.setAccessible(true);
                 try {
-                    row.put(field.getName(), field.get(entity)); // Adicionar o valor ao mapa
+                    row.put(field.getName(), field.get(entity));
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException("Erro ao acessar campo: " + field.getName(), e);
                 }

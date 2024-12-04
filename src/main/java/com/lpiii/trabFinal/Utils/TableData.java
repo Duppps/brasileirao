@@ -1,4 +1,4 @@
-package com.lpiii.trabFinal.Entities;
+package com.lpiii.trabFinal.Utils;
 
 import java.util.List;
 import java.util.Map;
