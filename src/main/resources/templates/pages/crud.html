@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="base">
+    <head>
+        <title th:text="'Gerenciamento de ' + ${entityName}"></title>
+    </head>
+    <body>
+        <section layout:fragment="content">
+            <h1 th:text="'Gerenciamento de ' + ${entityName}"></h1>
+            <ul>
+                <li>
+                    <button>Criar</button>
+                </li>
+                <li>
+                    <button>
+                        Editar
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        Excluir
+                    </button>
+                </li>
+            </ul>
+            <table>
+                <thead>
+                <tr>
+                    <th th:each="col : ${tableData.columns}" th:text="${col}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="row : ${tableData.rows}">
+                    <td th:each="col : ${tableData.columns}" th:text="${row[col.toLowerCase()]}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </body>
+</html>
