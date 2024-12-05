@@ -6,9 +6,9 @@
     <body>
         <section layout:fragment="content">
             <h1 th:text="'Gerenciamento de ' + ${entityName}"></h1>
-            <ul>
+            <ul class="horizontal-list">
                 <li>
-                    <button>Criar</button>
+                    <button onClick="openModal('create')">Criar</button>
                 </li>
                 <li>
                     <button>
@@ -33,6 +33,33 @@
                 </tr>
                 </tbody>
             </table>
+
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <h2>Título do Modal</h2>
+                    <p>Este é o conteúdo do modal.</p>
+                    <button class="close-btn" id="closeModal">Fechar</button>
+                </div>
+            </div>
+            <script th:inline="javascript">
+                const modal = document.getElementById('modal');
+                const openModalBtn = document.getElementById('openModal');
+                const closeModalBtn = document.getElementById('closeModal');
+
+                function openModal(type) {
+                    modal.style.display = 'flex';
+                }
+
+                closeModalBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            </script>
         </section>
     </body>
 </html>
