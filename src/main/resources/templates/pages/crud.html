@@ -30,14 +30,13 @@
         </tbody>
     </table>
 
-    <!-- Modal -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle">Título do Modal</h2>
             </div>
             <div id="modalBody">
-                <!-- O conteúdo do modal será renderizado aqui -->
+                <form th:replace="~{fragments/dynamicForm :: form}"></form>
             </div>
             <button class="close-btn" id="closeModal">Fechar</button>
         </div>
@@ -52,27 +51,9 @@
             switch (type) {
                 case "create":
                     modalTitle.textContent = "Criar Novo Item";
-                    modalBody.innerHTML = `
-                        <form>
-                            <label for="name">Nome:</label>
-                            <input type="text" id="name" name="name">
-                            <label for="description">Descrição:</label>
-                            <input type="text" id="description" name="description">
-                            <button type="submit">Salvar</button>
-                        </form>
-                    `;
                     break;
                 case "edit":
                     modalTitle.textContent = "Editar Item";
-                    modalBody.innerHTML = `
-                        <form>
-                            <label for="id">ID:</label>
-                            <input type="text" id="id" name="id" readonly>
-                            <label for="name">Nome:</label>
-                            <input type="text" id="name" name="name">
-                            <button type="submit">Atualizar</button>
-                        </form>
-                    `;
                     break;
                 case "delete":
                     modalTitle.textContent = "Excluir Item";

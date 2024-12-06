@@ -26,17 +26,72 @@ public class CrudController {
     private ApplicationContext applicationContext;
 
     @GetMapping("/{entity}")
-    public String handleEntity(@PathVariable String entity, Model model) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public String handleEntity(@PathVariable String entity, Model model) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {
         Class<?> entityClass = getClassForEntity(entity);
         Object repository = getRepositoryForEntity(entity);
 
         List<String> columns = getColumnsForEntity(entityClass);
         List<Map<String, Object>> rows = getRowsForEntity(repository);
+        List<Map<String, Object>> fieldList = getFields(entityClass);
 
         model.addAttribute("entityName", entity);
         model.addAttribute("tableData", new TableData(columns, rows));
+        model.addAttribute("fields", fieldList);
 
         return "pages/crud";
+    }
+
+    private List<Map<String, Object>> getFields(Class<?> entityClass) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {
+        Field[] fields = entityClass.getDeclaredFields();
+        List<Map<String, Object>> fieldInfo = new ArrayList<>();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(jakarta.persistence.GeneratedValue.class)) {
+                continue;
+            }
+
+            Map<String, Object> fieldDetails = new HashMap<>();
+            fieldDetails.put("name", field.getName());
+            fieldDetails.put("type", field.getType().getSimpleName());
+
+            if (field.getType().getName().startsWith("com.lpiii.trabFinal.Entities")) {
+                fieldDetails.put("isRelation", "true");
+                fieldDetails.put("relatedEntity", field.getType().getSimpleName());
+
+                String relatedEntityName = field.getType().getSimpleName();
+                Object relatedRepository = getRepositoryForEntity(relatedEntityName);
+
+                List<Map<String, Object>> relatedValues = getRelatedValues(relatedRepository);
+                fieldDetails.put("relatedValues", relatedValues);
+            } else {
+                fieldDetails.put("isRelation", "false");
+            }
+
+            fieldInfo.add(fieldDetails);
+        }
+
+        return fieldInfo;
+    }
+
+    private List<Map<String, Object>> getRelatedValues(Object repository) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {
+        List<?> entities = (List<?>) repository.getClass().getMethod("findAll").invoke(repository);
+        List<Map<String, Object>> relatedValues = new ArrayList<>();
+
+        for (Object entity : entities) {
+            Map<String, Object> map = new HashMap<>();
+            Field idField = entity.getClass().getDeclaredField("id");
+            Field nameField = entity.getClass().getDeclaredField("name");
+
+            idField.setAccessible(true);
+            nameField.setAccessible(true);
+
+            map.put("id", idField.get(entity));
+            map.put("name", nameField.get(entity));
+
+            relatedValues.add(map);
+        }
+
+        return relatedValues;
     }
 
     private Class<?> getClassForEntity(String entity) throws ClassNotFoundException {
