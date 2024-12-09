@@ -1,85 +1,131 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="base">
-<head>
-    <title th:text="'Gerenciamento de ' + ${entityName}"></title>
-</head>
-<body>
-<section layout:fragment="content">
-    <h1 th:text="'Gerenciamento de ' + ${entityName}"></h1>
-    <ul class="horizontal-list">
-        <li>
-            <button onClick="openModal('create')">Criar</button>
-        </li>
-        <li>
-            <button onClick="openModal('edit')">Editar</button>
-        </li>
-        <li>
-            <button onClick="openModal('delete')">Excluir</button>
-        </li>
-    </ul>
-    <table>
-        <thead>
-        <tr>
-            <th th:each="col : ${tableData.columns}" th:text="${col}"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="row : ${tableData.rows}">
-            <td th:each="col : ${tableData.columns}" th:text="${row[col.toLowerCase()]}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <head>
+        <title th:text="'Gerenciamento de ' + ${entityName}"></title>
+    </head>
+    <body>
+        <section layout:fragment="content">
+            <h1 th:text="'Gerenciamento de ' + ${entityName}"></h1>
+            <ul class="horizontal-list">
+                <li>
+                    <button onClick="openModal('create')">Criar</button>
+                </li>
+                <li>
+                    <button onClick="openModal('delete')">Excluir</button>
+                </li>
+            </ul>
+            <table class="margin-top-10 table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" onClick="checkAll()" />
+                        </th>
+                        <th>
+                            Ações
+                        </th>
+                        <th th:each="col : ${tableData.columns}" th:text="${col}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="row : ${tableData.rows}">
+                    <td>
+                        <input type="checkbox" th:value="${row[id]}" class="checkbox-row" />
+                    </td>
+                    <td>
+                        <button onClick="openModal('edit')"></button>
+                    </td>
+                    <td th:each="col : ${tableData.columns}" th:text="${row[col.toLowerCase()]}"></td>
+                </tr>
+                </tbody>
+            </table>
 
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">Título do Modal</h2>
+            <div id="modal-create" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalCreateTitle">Criar Novo Item</h2>
+                        <button class="close-btn" onClick="closeModal('create')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:replace="~{fragments/dynamicForm :: form(formAction=post)}"></form>
+                    </div>
+                </div>
             </div>
-            <div id="modalBody">
-                <form th:replace="~{fragments/dynamicForm :: form}"></form>
-            </div>
-            <button class="close-btn" id="closeModal">Fechar</button>
-        </div>
-    </div>
-    <script th:inline="javascript">
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-        const closeModalBtn = document.getElementById('closeModal');
 
-        function openModal(type) {
-            switch (type) {
-                case "create":
-                    modalTitle.textContent = "Criar Novo Item";
-                    break;
-                case "edit":
-                    modalTitle.textContent = "Editar Item";
-                    break;
-                case "delete":
-                    modalTitle.textContent = "Excluir Item";
-                    modalBody.innerHTML = `
+            <div id="modal-edit" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalEditTitle">Editar Item</h2>
+                        <button class="close-btn" onClick="closeModal('edit')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <label for="editName">Nome:</label>
+                            <input type="text" id="editName" name="editName" required>
+                            <button type="submit">Salvar Alterações</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-delete" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalDeleteTitle">Excluir Item</h2>
+                        <button class="close-btn" onClick="closeModal('delete')">&times;</button>
+                    </div>
+                    <div class="modal-body">
                         <p>Tem certeza de que deseja excluir este item?</p>
                         <button>Confirmar</button>
-                        <button onClick="closeModal()">Cancelar</button>
-                    `;
-                    break;
-                default:
-                    return;
-            }
-            modal.style.display = 'flex';
-        }
+                        <button onClick="closeModal('delete')">Cancelar</button>
+                    </div>
+                </div>
+            </div>
 
-        function closeModal() {
-            modal.style.display = 'none';
-        }
+            <script th:inline="javascript">
+                function openModal(type) {
+                    closeAllModals();
 
-        closeModalBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
-    </script>
-</section>
-</body>
+                    const modalId = `modal-${type}`;
+                    const modal = document.getElementById(modalId);
+
+                    if (modal) {
+                        modal.style.display = 'flex';
+                    } else {
+                        console.error("Modal não encontrado:", modalId);
+                    }
+                }
+
+                function closeModal(type) {
+                    const modalId = `modal-${type}`;
+                    const modal = document.getElementById(modalId);
+
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                }
+
+                function closeAllModals() {
+                    const modals = document.querySelectorAll('.modal');
+                    modals.forEach(modal => {
+                        modal.style.display = 'none';
+                    });
+                }
+
+                function checkAll() {
+                    const rows = document.getElementsByClassName("checkbox-row");
+                    const masterCheckbox = document.querySelector('thead input[type="checkbox"]');
+                    const isChecked = masterCheckbox.checked;
+
+                    if (isChecked && Array.from(rows).every(row => row.checked)) {
+                        masterCheckbox.checked = false;
+                    }
+
+                    Array.from(rows).forEach(row => {
+                        row.checked = isChecked;
+                    });
+                }
+
+            </script>
+        </section>
+    </body>
 </html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="base">
+    <head>
+        <title th:text="Times"></title>
+    </head>
+    <body>
+        <section layout:fragment="content">
+            <ul class="horizontal-list">
+                <li>
+                    <button onClick="openModal('create')">Criar</button>
+                </li>
+                <li>
+                    <button onClick="openModal('delete')">Excluir</button>
+                </li>
+            </ul>
+            <table class="margin-top-10 table">
+                <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" onClick="checkAll()" />
+                    </th>
+                    <th>
+                        Ações
+                    </th>
+                    <th>Nome</th>
+                    <th>Estádio</th>
+                    <th>Cidade</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="team : ${teamList}">
+                    <td>
+                        <input type="checkbox" th:value="${team.id}" class="checkbox-row" />
+                    </td>
+                    <td>
+                        <button onClick="openModal('edit')"><i class="fas fa-pencil-alt"></i> Editar</button>
+                    </td>
+                    <td th:text="${team.name}"></td>
+                    <td th:text="${team.stadium}"></td>
+                    <td th:text="${team.city}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="modal-create" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalCreateTitle">Criar Novo Item</h2>
+                        <button class="close-btn" onClick="closeModal('create')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="name_create">Nome</label>
+                        <input type="text" id="name_create" />
+                        <label for="city_create">Cidade</label>
+                        <input type="text" id="city_create" />
+                        <label for="stadium_create">Estádio</label>
+                        <input type="text" id="stadium_create" />
+                        <button onClick="createTeam()">Salvar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-edit" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalEditTitle">Editar Item</h2>
+                        <button class="close-btn" onClick="closeModal('edit')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="name_edit">Nome</label>
+                        <input type="text" id="name_edit" />
+                        <label for="city_edit">Cidade</label>
+                        <input type="text" id="city_edit" />
+                        <label for="stadium_edit">Estádio</label>
+                        <input type="text" id="stadium_edit" />
+                        <button onClick="editTeam()">Salvar</button>
+                    </div>
+                </div>
+            </div>
+
+            <script th:inline="javascript">
+                function openModal(mode) {
+                    if (mode === "create") {
+                        const modal = document.getElementById("modal-create");
+                        modal.style.display = "flex";
+                    } else if (mode === "edit") {
+                        const modal = document.getElementById("modal-edit");
+                        modal.style.display = "flex";
+                    }
+                }
+
+                function closeModal(mode) {
+                    const modal = document.getElementById("modal-"+mode);
+                    modal.style.display = "none";
+                }
+
+                function checkAll() {
+                    const rows = document.getElementsByClassName("checkbox-row");
+                    const masterCheckbox = document.querySelector('thead input[type="checkbox"]');
+                    const isChecked = masterCheckbox.checked;
+
+                    if (isChecked && Array.from(rows).every(row => row.checked)) {
+                        masterCheckbox.checked = false;
+                    }
+
+                    Array.from(rows).forEach(row => {
+                        row.checked = isChecked;
+                    });
+                }
+
+                async function createTeam() {
+                    try {
+                        const response = await fetch("/team", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                name: document.getElementById("name_create").value,
+                                city: document.getElementById("city_create").value,
+                                stadium: document.getElementById("stadium_create").value
+                            })
+                        });
+
+                        if (response.ok) {
+                            console.log("Team created successfully");
+                            closeModal("create");
+                            location.reload();
+                        } else {
+                            console.error("Failed to create team", response.status);
+                        }
+                    } catch (error) {
+                        console.error("Error creating team:", error);
+                    }
+                }
+            </script>
+        </section>
+    </body>
+</html>

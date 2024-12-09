@@ -1,5 +1,5 @@
-<div xmlns:th="http://www.w3.org/1999/xhtml">
-    <form action="#" method="post">
+<div th:fragment="form(formAction)" xmlns:th="http://www.thymeleaf.org">
+    <form th:action="${entityName}" th:method="${formAction}">
         <div th:each="field : ${fields}">
             <label th:for="${field.name}" th:text="${field.name}"></label>
 

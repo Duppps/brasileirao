@@ -3,13 +3,18 @@ package com.lpiii.trabFinal.Controllers;
 import com.lpiii.trabFinal.Utils.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +29,28 @@ public class CrudController {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @PostMapping("/{entity}")
+    public String createItem(@PathVariable String entity, @RequestParam Map<String, String> formData) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Class<?> entityClass = getClassForEntity(entity);
+        Object entityInstance = entityClass.getDeclaredConstructor().newInstance();
+        JpaRepository<Object, Long> repository = (JpaRepository<Object, Long>) getRepositoryForEntity(entity);
+
+        formData.forEach((key, value) -> {
+            try {
+                String setterName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
+                Method setter = entityClass.getMethod(setterName, String.class);
+                setter.invoke(entityInstance, value);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        repository.save(entityInstance);
+
+        return "redirect:/" + entity;
+    }
+
 
     @GetMapping("/{entity}")
     public String handleEntity(@PathVariable String entity, Model model) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException, NoSuchFieldException {

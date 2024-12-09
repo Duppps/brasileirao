@@ -62,6 +62,26 @@ ul {
     font-size: 14px;
 }
 
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
 .close-btn:hover {
     background-color: darkred;
 }
