@@ -33,7 +33,7 @@
                         <input type="checkbox" th:value="${team.id}" class="checkbox-row" />
                     </td>
                     <td>
-                        <button onClick="openModal('edit')"><i class="fas fa-pencil-alt"></i> Editar</button>
+                        <button th:attr="onclick=|openModal('edit', ${team.id})|"><i class="fas fa-pencil-alt"></i>Editar</button>
                     </td>
                     <td th:text="${team.name}"></td>
                     <td th:text="${team.stadium}"></td>
@@ -66,6 +66,8 @@
                         <button class="close-btn" onClick="closeModal('edit')">&times;</button>
                     </div>
                     <div class="modal-body">
+                        <label for="id_edit">ID</label>
+                        <input type="text" id="id_edit" readonly />
                         <label for="name_edit">Nome</label>
                         <input type="text" id="name_edit" />
                         <label for="city_edit">Cidade</label>
@@ -78,19 +80,53 @@
             </div>
 
             <script th:inline="javascript">
-                function openModal(mode) {
+                const teamData = /*[[${teamList}]]*/ [];
+
+                function openModal(mode, id = null) {
                     if (mode === "create") {
                         const modal = document.getElementById("modal-create");
                         modal.style.display = "flex";
                     } else if (mode === "edit") {
                         const modal = document.getElementById("modal-edit");
-                        modal.style.display = "flex";
+                        if (id !== null) {
+                            getTeam(id);
+                            modal.style.display = "flex";
+                        } else {
+                            console.error("No ID provided for edit mode");
+                        }
                     }
                 }
 
                 function closeModal(mode) {
                     const modal = document.getElementById("modal-"+mode);
                     modal.style.display = "none";
+                }
+
+                async function editTeam() {
+                    const teamId = document.getElementById("id_edit").value;
+                    try {
+                        const response = await fetch(`/teams/${teamId}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                name: document.getElementById("name_edit").value,
+                                city: document.getElementById("city_edit").value,
+                                stadium: document.getElementById("stadium_edit").value
+                            })
+                        });
+
+                        if (response.ok) {
+                            console.log("Team updated successfully");
+                            closeModal("edit");
+                            location.reload();
+                        } else {
+                            console.error("Failed to update team", response.status);
+                        }
+                    } catch (error) {
+                        console.error("Error editing team:", error);
+                    }
                 }
 
                 function checkAll() {
@@ -109,7 +145,7 @@
 
                 async function createTeam() {
                     try {
-                        const response = await fetch("/team", {
+                        const response = await fetch("/teams/", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -122,14 +158,23 @@
                         });
 
                         if (response.ok) {
-                            console.log("Team created successfully");
                             closeModal("create");
                             location.reload();
-                        } else {
-                            console.error("Failed to create team", response.status);
                         }
                     } catch (error) {
                         console.error("Error creating team:", error);
+                    }
+                }
+
+                function getTeam(id) {
+                    const selectedTeam = teamData.find(team => team.id === id);
+                    if (selectedTeam) {
+                        document.getElementById('id_edit').value = selectedTeam.id;
+                        document.getElementById('name_edit').value = selectedTeam.name;
+                        document.getElementById('city_edit').value = selectedTeam.city;
+                        document.getElementById('stadium_edit').value = selectedTeam.stadium;
+                    } else {
+                        console.error("Time não encontrado com ID:", id);
                     }
                 }
             </script>
