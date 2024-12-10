@@ -19,7 +19,7 @@ public class TeamController {
     @Autowired
     TeamRepository teamRepository;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getTeams(Model model) {
         List<Team> teamList = teamRepository.findAll();
         model.addAttribute("teamList", teamList);
@@ -42,6 +42,15 @@ public class TeamController {
     @PostMapping("/")
     public ResponseEntity<String> createTeam(@RequestBody Team team) {
         teamRepository.save(team);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTeam(@PathVariable Long id) {
+        Team team = teamRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Team not found with id " + id));
+
+        teamRepository.delete(team);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -79,6 +79,19 @@
                 </div>
             </div>
 
+            <div id="modal-delete" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalDeleteTitle"></h2>
+                        <input type="text" id="list_id_delete" style="display: none;">
+                    </div>
+                    <div class="modal-body">
+                        <button onClick="deleteTeam()">Salvar</button>
+                        <button class="close-btn" onClick="closeModal('delete')"> Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
             <script th:inline="javascript">
                 const teamData = /*[[${teamList}]]*/ [];
 
@@ -93,6 +106,19 @@
                             modal.style.display = "flex";
                         } else {
                             console.error("No ID provided for edit mode");
+                        }
+                    } else if (mode === "delete") {
+                        const modal = document.getElementById("modal-delete");
+                        const rows = document.querySelectorAll(".checkbox-row:checked");
+                        const listIdDelete = document.getElementById("list_id_delete");
+                        let totalItems = rows.length;
+
+                        if (totalItems > 0) {
+                            const ids = Array.from(rows).map(row => row.value).join(",");
+                            listIdDelete.value = ids;
+
+                            document.getElementById("modalDeleteTitle").innerText = `Deseja excluir ${totalItems} item(ns)?`;
+                            modal.style.display = "flex";
                         }
                     }
                 }
@@ -118,7 +144,6 @@
                         });
 
                         if (response.ok) {
-                            console.log("Team updated successfully");
                             closeModal("edit");
                             location.reload();
                         } else {
@@ -163,6 +188,30 @@
                         }
                     } catch (error) {
                         console.error("Error creating team:", error);
+                    }
+                }
+
+                async function deleteTeam() {
+                    const raw_ids = document.getElementById("list_id_delete").value;
+                    const ids = raw_ids.split(",");
+                    let status = false;
+
+                    for (const id of ids) {
+                        try {
+                            const response = await fetch(`/teams/${id}`, {
+                                method: "DELETE"
+                            });
+
+                            if (response.ok) {
+                                status = true;
+                            }
+                        } catch (error) {
+                            console.error("Error deleting team:", error);
+                        }
+                    }
+
+                    if (status) {
+                        location.reload();
                     }
                 }
 
