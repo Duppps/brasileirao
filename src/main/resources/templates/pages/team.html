@@ -5,12 +5,12 @@
     </head>
     <body>
         <section layout:fragment="content">
-            <ul class="horizontal-list">
+            <ul class="horizontal-list margin-top-10">
                 <li>
-                    <button onClick="openModal('create')">Criar</button>
+                    <button class="btn-create" onClick="openModal('create')">Criar</button>
                 </li>
                 <li>
-                    <button onClick="openModal('delete')">Excluir</button>
+                    <button class="btn-delete" onClick="openModal('delete')">Excluir</button>
                 </li>
             </ul>
             <table class="margin-top-10 table">
@@ -33,7 +33,10 @@
                         <input type="checkbox" th:value="${team.id}" class="checkbox-row" />
                     </td>
                     <td>
-                        <button th:attr="onclick=|openModal('edit', ${team.id})|"><i class="fas fa-pencil-alt"></i>Editar</button>
+                        <button class="btn-edit" th:attr="onclick=|openModal('edit', ${team.id})|">
+                            <i class="fas fa-pencil-alt margin-end-4"></i>
+                            Editar
+                        </button>
                     </td>
                     <td th:text="${team.name}"></td>
                     <td th:text="${team.stadium}"></td>

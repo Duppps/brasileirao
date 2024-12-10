@@ -1,7 +1,5 @@
 package com.lpiii.trabFinal.Entities;
 
-import com.lpiii.trabFinal.DTO.MatchDTO;
-import com.lpiii.trabFinal.Repositories.TeamRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,18 +15,20 @@ public class Match {
     @Column
     private Long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "homeTeamId", nullable = false)
     private Team homeTeam;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "visitingTeamId", nullable = false)
     private Team visitingTeam;
 
-    @Column
+    @Column(nullable = false)
     private int goalsHomeTeam;
 
-    @Column
+    @Column(nullable = false)
     private int goalsVisitingTeam;
 
-    @Column
+    @Column(nullable = false)
     private Timestamp dateTime;
 }

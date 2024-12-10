@@ -5,12 +5,12 @@
     </head>
     <body>
         <section layout:fragment="content">
-            <ul class="horizontal-list">
+            <ul class="horizontal-list margin-top-10">
                 <li>
-                    <button onClick="openModal('create')">Criar</button>
+                    <button class="btn-create" onClick="openModal('create')">Criar</button>
                 </li>
                 <li>
-                    <button onClick="openModal('delete')">Excluir</button>
+                    <button class="btn-delete" onClick="openModal('delete')">Excluir</button>
                 </li>
             </ul>
             <table class="margin-top-10 table">
@@ -35,7 +35,10 @@
                             <input type="checkbox" th:value="${match.id}" class="checkbox-row" />
                         </td>
                         <td>
-                            <button th:attr="onclick=|openModal('edit', ${match.id})|"><i class="fas fa-pencil-alt"></i>Editar</button>
+                            <button class="btn-edit" th:attr="onclick=|openModal('edit', ${match.id})|">
+                                <i class="fas fa-pencil-alt margin-end-4"></i>
+                                Editar
+                            </button>
                         </td>
                         <td th:text="${match.homeTeam}"></td>
                         <td th:text="${match.visitingTeam}"></td>
@@ -188,10 +191,10 @@
                                 "Content-Type": "application/json"
                             },
                             body: JSON.stringify({
-                                homeTeam: document.getElementById("home_team_create").value,
-                                visitingTeam: document.getElementById("visiting_team_create").value,
-                                goalsHomeTeam: document.getElementById("goals_home_team_create").value,
-                                goalsVisitingTeam: document.getElementById("goals_visiting_team_create").value,
+                                homeTeamId: parseInt(document.getElementById("home_team_create").value),
+                                visitingTeamId: parseInt(document.getElementById("visiting_team_create").value),
+                                homeGoals: parseInt(document.getElementById("goals_home_team_create").value),
+                                visitingGoals: parseInt(document.getElementById("goals_visiting_team_create").value),
                                 dateTime: document.getElementById("date_create").value
                             })
                         });
@@ -199,6 +202,10 @@
                         if (response.ok) {
                             closeModal("create");
                             location.reload();
+                        } else {
+                            const errorMessage = await response.text();
+                            console.error("Error creating match:", errorMessage);
+                            alert("Failed to create match: " + errorMessage);
                         }
                     } catch (error) {
                         console.error("Error creating match:", error);

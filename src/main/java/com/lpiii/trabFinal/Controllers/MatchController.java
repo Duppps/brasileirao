@@ -5,6 +5,7 @@ import com.lpiii.trabFinal.Entities.Match;
 import com.lpiii.trabFinal.Entities.Team;
 import com.lpiii.trabFinal.Repositories.MatchRepository;
 import com.lpiii.trabFinal.Repositories.TeamRepository;
+import com.lpiii.trabFinal.Services.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,9 @@ public class MatchController {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    private MatchService matchService;
+
     @GetMapping("")
     public String getTeams(Model model) {
         List<Match> matchList = matchRepository.findAll();
@@ -42,32 +46,13 @@ public class MatchController {
     @PostMapping("/")
     public ResponseEntity<String> createMatch(@RequestBody MatchDTO matchDTO) {
         try {
-            Long idHomeTeam = matchDTO.homeTeamId();
-            Long idVisitingTeam = matchDTO.visitingTeamId();
-            int goalsHomeTeam = matchDTO.homeGoals();
-            int goalsVisitingTeam = matchDTO.visitingGoals();
-            Timestamp dateTime = matchDTO.dateTime();
+            Boolean result = matchService.createMatch(matchDTO);
 
-            Optional<Team> optionalHomeTeam = teamRepository.findById(idHomeTeam);
-            Optional<Team> optionalVisitingTeam = teamRepository.findById(idVisitingTeam);
-
-            if (optionalHomeTeam.isEmpty() || optionalVisitingTeam.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating match: Team don't found");
+            if (!result) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating match");
             }
 
-            Team homeTeam = optionalHomeTeam.get();
-            Team visitingTeam = optionalVisitingTeam.get();
-
-            Match match = new Match();
-            match.setHomeTeam(homeTeam);
-            match.setVisitingTeam(visitingTeam);
-            match.setGoalsHomeTeam(goalsHomeTeam);
-            match.setGoalsVisitingTeam(goalsVisitingTeam);
-            match.setDateTime(dateTime);
-
-            matchRepository.save(match);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body("Match created successfully.");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Success");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating match: " + e.getMessage());
         }
