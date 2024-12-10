@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="base">
+    <head>
+        <title th:text="Partidas"></title>
+    </head>
+    <body>
+        <section layout:fragment="content">
+            <ul class="horizontal-list">
+                <li>
+                    <button onClick="openModal('create')">Criar</button>
+                </li>
+                <li>
+                    <button onClick="openModal('delete')">Excluir</button>
+                </li>
+            </ul>
+            <table class="margin-top-10 table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" onClick="checkAll()" />
+                        </th>
+                        <th>
+                            Ações
+                        </th>
+                        <th>Time Casa</th>
+                        <th>Time Visitante</th>
+                        <th>Gols Time Casa</th>
+                        <th>Gols Time Visitante</th>
+                        <th>Dia Partida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="match : ${matchList}">
+                        <td>
+                            <input type="checkbox" th:value="${match.id}" class="checkbox-row" />
+                        </td>
+                        <td>
+                            <button th:attr="onclick=|openModal('edit', ${match.id})|"><i class="fas fa-pencil-alt"></i>Editar</button>
+                        </td>
+                        <td th:text="${match.homeTeam}"></td>
+                        <td th:text="${match.visitingTeam}"></td>
+                        <td th:text="${match.goalsHomeTeam}"></td>
+                        <td th:text="${match.goalsVisitingTeam}"></td>
+                        <td th:text="${match.dateTime}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="modal-create" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalCreateTitle">Criar Novo Item</h2>
+                        <button class="close-btn" onClick="closeModal('create')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="home_team_create">Time de Casa</label>
+                        <select id="home_team_create">
+                            <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
+                        </select>
+                        <label for="goals_home_team_create">Gols</label>
+                        <input type="number" id="goals_home_team_create" />
+
+                        <label for="visiting_team_create">Time Visitante</label>
+                        <select id="visiting_team_create">
+                            <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
+                        </select>
+                        <label for="goals_visiting_team_create">Gols</label>
+                        <input type="number" id="goals_visiting_team_create" />
+
+                        <label for="date_create">Gols</label>
+                        <input type="datetime-local" id="date_create" />
+                        <button onClick="createMatch()">Salvar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-edit" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalEditTitle">Editar Item</h2>
+                        <button class="close-btn" onClick="closeModal('edit')">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="id_edit">ID</label>
+                        <input type="text" id="id_edit" readonly />
+                        <label for="name_edit">Nome</label>
+                        <input type="text" id="name_edit" />
+                        <label for="city_edit">Cidade</label>
+                        <input type="text" id="city_edit" />
+                        <label for="stadium_edit">Estádio</label>
+                        <input type="text" id="stadium_edit" />
+                        <button onClick="editTeam()">Salvar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal-delete" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modalDeleteTitle"></h2>
+                        <input type="text" id="list_id_delete" style="display: none;">
+                    </div>
+                    <div class="modal-body">
+                        <button onClick="deleteTeam()">Salvar</button>
+                        <button class="close-btn" onClick="closeModal('delete')"> Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <script th:inline="javascript">
+                function openModal(mode, id = null) {
+                    if (mode === "create") {
+                        const modal = document.getElementById("modal-create");
+                        modal.style.display = "flex";
+                    } else if (mode === "edit") {
+                        const modal = document.getElementById("modal-edit");
+                        if (id !== null) {
+                            getTeam(id);
+                            modal.style.display = "flex";
+                        } else {
+                            console.error("No ID provided for edit mode");
+                        }
+                    } else if (mode === "delete") {
+                        const modal = document.getElementById("modal-delete");
+                        const rows = document.querySelectorAll(".checkbox-row:checked");
+                        const listIdDelete = document.getElementById("list_id_delete");
+                        let totalItems = rows.length;
+
+                        if (totalItems > 0) {
+                            const ids = Array.from(rows).map(row => row.value).join(",");
+                            listIdDelete.value = ids;
+
+                            document.getElementById("modalDeleteTitle").innerText = `Deseja excluir ${totalItems} item(ns)?`;
+                            modal.style.display = "flex";
+                        }
+                    }
+                }
+
+                function closeModal(mode) {
+                    const modal = document.getElementById("modal-"+mode);
+                    modal.style.display = "none";
+                }
+
+                async function editTeam() {
+                    const teamId = document.getElementById("id_edit").value;
+                    try {
+                        const response = await fetch(`/teams/${teamId}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                name: document.getElementById("name_edit").value,
+                                city: document.getElementById("city_edit").value,
+                                stadium: document.getElementById("stadium_edit").value
+                            })
+                        });
+
+                        if (response.ok) {
+                            closeModal("edit");
+                            location.reload();
+                        } else {
+                            console.error("Failed to update team", response.status);
+                        }
+                    } catch (error) {
+                        console.error("Error editing team:", error);
+                    }
+                }
+
+                function checkAll() {
+                    const rows = document.getElementsByClassName("checkbox-row");
+                    const masterCheckbox = document.querySelector('thead input[type="checkbox"]');
+                    const isChecked = masterCheckbox.checked;
+
+                    if (isChecked && Array.from(rows).every(row => row.checked)) {
+                        masterCheckbox.checked = false;
+                    }
+
+                    Array.from(rows).forEach(row => {
+                        row.checked = isChecked;
+                    });
+                }
+
+                async function createMatch() {
+                    try {
+                        const response = await fetch("/matchs/", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                homeTeam: document.getElementById("home_team_create").value,
+                                visitingTeam: document.getElementById("visiting_team_create").value,
+                                goalsHomeTeam: document.getElementById("goals_home_team_create").value,
+                                goalsVisitingTeam: document.getElementById("goals_visiting_team_create").value,
+                                dateTime: document.getElementById("date_create").value
+                            })
+                        });
+
+                        if (response.ok) {
+                            closeModal("create");
+                            location.reload();
+                        }
+                    } catch (error) {
+                        console.error("Error creating match:", error);
+                    }
+                }
+
+                async function deleteTeam() {
+                    const raw_ids = document.getElementById("list_id_delete").value;
+                    const ids = raw_ids.split(",");
+                    let status = false;
+
+                    for (const id of ids) {
+                        try {
+                            const response = await fetch(`/teams/${id}`, {
+                                method: "DELETE"
+                            });
+
+                            if (response.ok) {
+                                status = true;
+                            }
+                        } catch (error) {
+                            console.error("Error deleting team:", error);
+                        }
+                    }
+
+                    if (status) {
+                        location.reload();
+                    }
+                }
+
+                function getTeam(id) {
+                    const selectedTeam = teamData.find(team => team.id === id);
+                    if (selectedTeam) {
+                        document.getElementById('id_edit').value = selectedTeam.id;
+                        document.getElementById('name_edit').value = selectedTeam.name;
+                        document.getElementById('city_edit').value = selectedTeam.city;
+                        document.getElementById('stadium_edit').value = selectedTeam.stadium;
+                    } else {
+                        console.error("Time não encontrado com ID:", id);
+                    }
+                }
+            </script>
+        </section>
+    </body>
+</html>

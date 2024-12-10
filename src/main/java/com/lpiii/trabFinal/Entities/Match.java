@@ -1,5 +1,7 @@
 package com.lpiii.trabFinal.Entities;
 
+import com.lpiii.trabFinal.DTO.MatchDTO;
+import com.lpiii.trabFinal.Repositories.TeamRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

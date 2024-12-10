@@ -21,4 +21,9 @@ public class Team {
 
     @Column(nullable = false)
     private String stadium;
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }
