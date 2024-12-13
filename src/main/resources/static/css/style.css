@@ -52,16 +52,6 @@ ul {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.close-btn {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -92,6 +82,14 @@ ul {
 
 .margin-top-10 {
     margin-top: 10px;
+}
+
+.margin-top-5 {
+    margin-top: 5px;
+}
+
+.modal-body {
+    text-align: left;
 }
 
 .btn-create {
@@ -169,8 +167,73 @@ button {
     background-color: #e3ab02;
 }
 
-.close-btn:hover {
-    background-color: darkred;
+.btn-save {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #45a049;
+}
+
+.btn-save:active {
+    background-color: #3e8e41;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-items-between {
+    justify-content: space-between;
+}
+
+.d-inline {
+    display: inline;
+}
+
+.ms-auto {
+    margin-left: auto;
+}
+
+.modal-header {
+    font-weight: bold;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    padding: 5px 0;
+    margin-bottom: 10px;
+}
+
+.close-btn {
+    border: none;
+    cursor: pointer;
+    background-color: rgba(0,0,0,0);
+    padding: 0;
+    text-align: right;
+}
+
+.text-end {
+    text-align: right;
+}
+
+input {
+    padding: 5px 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+input::placeholder {
+    color: #999;
+    font-style: italic;
 }
 
 @media (min-width: 576px) {

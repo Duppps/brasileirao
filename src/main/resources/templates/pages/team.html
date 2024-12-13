@@ -46,18 +46,29 @@
             </table>
             <div id="modal-create" class="modal">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 id="modalCreateTitle">Criar Novo Item</h2>
-                        <button class="close-btn" onClick="closeModal('create')">&times;</button>
+                    <div class="modal-header d-flex">
+                        <span id="modalCreateTitle" class="modal-title">Criar Novo Item</span>
+                        <button class="ms-auto close-btn" onClick="closeModal('create')">
+                            <i class="fa fa-xmark"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
-                        <label for="name_create">Nome</label>
-                        <input type="text" id="name_create" />
-                        <label for="city_create">Cidade</label>
-                        <input type="text" id="city_create" />
-                        <label for="stadium_create">Estádio</label>
-                        <input type="text" id="stadium_create" />
-                        <button onClick="createTeam()">Salvar</button>
+                        <div>
+                            <label for="name_create">Nome:</label><br>
+                            <input type="text" id="name_create" />
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="city_create">Cidade</label><br>
+                            <input type="text" id="city_create" />
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="stadium_create">Estádio</label><br>
+                            <input type="text" id="stadium_create" />
+                        </div>
+                    </div>
+                    <div class="modal-footer margin-top-10 text-end">
+                        <button class="btn-save" onClick="createTeam()">Salvar</button>
+                        <button class="btn-delete" onClick="closeModal()">Cancelar</button>
                     </div>
                 </div>
             </div>
