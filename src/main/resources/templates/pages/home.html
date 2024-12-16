@@ -1,19 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Título</title>
-    </head>
-    <body>
-        <table>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="base">
+<head>
+    <title th:text="Home"></title>
+</head>
+<body>
+<section layout:fragment="content">
+    <table class="margin-top-10 table">
+        <thead>
             <tr>
-                <td>
-                    ID
-                </td>
-                <td>
-                    Nome
-                </td>
+                <th>Nome</th>
+                <th>Pontos</th>
+                <th>Vitórias</th>
+                <th>Empates</th>
+                <th>Derrotas</th>
+                <th>Gols Marcados</th>
+                <th>Gols Sofridos</th>
+                <th>Aproveitamento</th>
             </tr>
-        </table>
-    </body>
+        </thead>
+        <tbody>
+            <tr th:each="team : ${teamList}">
+                <td th:text="${team.name}"></td>
+                <td th:text="${team.points}"></td>
+                <td th:text="${team.wins}"></td>
+                <td th:text="${team.draws}"></td>
+                <td th:text="${team.losses}"></td>
+                <td th:text="${team.goalsScored}"></td>
+                <td th:text="${team.goalsConceded}"></td>
+                <td th:text="${team.winPercentage}"></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+</body>
 </html>

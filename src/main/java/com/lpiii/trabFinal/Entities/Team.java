@@ -22,6 +22,27 @@ public class Team {
     @Column(nullable = false)
     private String stadium;
 
+    @Column(nullable = false)
+    private int points = 0;
+
+    @Column(nullable = false)
+    private int wins = 0;
+
+    @Column(nullable = false)
+    private int draws = 0;
+
+    @Column(nullable = false)
+    private int losses = 0;
+
+    @Column(nullable = false)
+    private int goalsScored = 0;
+
+    @Column(nullable = false)
+    private int goalsConceded = 0;
+
+    @Column(nullable = false)
+    private double winPercentage = 0;
+
     @Override
     public String toString() {
         return this.name;
