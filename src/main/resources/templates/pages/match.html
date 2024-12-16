@@ -117,7 +117,7 @@
                     } else if (mode === "edit") {
                         const modal = document.getElementById("modal-edit");
                         if (id !== null) {
-                            getTeam(id);
+                            getMatch(id);
                             modal.style.display = "flex";
                         } else {
                             console.error("No ID provided for edit mode");
@@ -236,7 +236,7 @@
                     }
                 }
 
-                function getTeam(id) {
+                function getMatch(id) {
                     const selectedTeam = teamData.find(team => team.id === id);
                     if (selectedTeam) {
                         document.getElementById('id_edit').value = selectedTeam.id;
