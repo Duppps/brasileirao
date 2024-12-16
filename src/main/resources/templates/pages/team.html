@@ -37,6 +37,10 @@
                             <i class="fas fa-pencil-alt margin-end-4"></i>
                             Editar
                         </button>
+                        <button class="btn-show" th:attr="onclick=|showMatches(${team.id})|">
+                            <i class="fa-solid fa-volleyball margin-end-4"></i>
+                            Ver Partidas
+                        </button>
                     </td>
                     <td th:text="${team.name}"></td>
                     <td th:text="${team.stadium}"></td>
@@ -108,6 +112,10 @@
 
             <script th:inline="javascript">
                 const teamData = /*[[${teamList}]]*/ [];
+
+                function showMatches(teamId) {
+                    window.location.href = `/teams/${teamId}`;
+                }
 
                 function openModal(mode, id = null) {
                     if (mode === "create") {

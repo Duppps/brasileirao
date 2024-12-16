@@ -44,6 +44,31 @@ public class MatchService {
         match.setGoalsVisitingTeam(goalsVisitingTeam);
         match.setDateTime(dateTime);
 
+        if (goalsHomeTeam > goalsVisitingTeam) {
+            homeTeam.addPoints(3);
+            homeTeam.addWin();
+            visitingTeam.addLoss();
+        } else if (goalsHomeTeam < goalsVisitingTeam) {
+            visitingTeam.addPoints(3);
+            visitingTeam.addWin();
+            homeTeam.addLoss();
+        } else {
+            homeTeam.addPoints(1);
+            visitingTeam.addPoints(1);
+            homeTeam.addDraw();
+            visitingTeam.addDraw();
+        }
+
+        homeTeam.addGoalsScored(goalsHomeTeam);
+        homeTeam.addGoalsConceded(goalsVisitingTeam);
+        homeTeam.addMatches();
+
+        visitingTeam.addGoalsScored(goalsVisitingTeam);
+        visitingTeam.addGoalsConceded(goalsHomeTeam);
+        visitingTeam.addMatches();
+
+        teamRepository.save(homeTeam);
+        teamRepository.save(visitingTeam);
         matchRepository.save(match);
 
         return true;

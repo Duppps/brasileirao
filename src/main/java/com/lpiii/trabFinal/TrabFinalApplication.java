@@ -38,16 +38,8 @@ public class TrabFinalApplication implements CommandLineRunner {
 		inter.setCity("Porto Alegre");
 		inter.setStadium("Beira-Rio");
 
-		Match match = new Match();
-		match.setHomeTeam(gremio);
-		match.setVisitingTeam(inter);
-		match.setGoalsHomeTeam(2);
-		match.setGoalsVisitingTeam(0);
-		match.setDateTime(Timestamp.valueOf("2024-12-10 15:30:00"));
-
 		teamRepository.save(gremio);
 		teamRepository.save(inter);
-		matchRepository.save(match);
 	}
 
 	@Bean

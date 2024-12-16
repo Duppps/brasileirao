@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="base">
+    <head>
+        <title>Partidas por Time</title>
+    </head>
+    <body>
+    <section layout:fragment="content">
+        <table class="margin-top-10 table">
+            <thead>
+                <tr>
+                    <th>Time de Casa</th>
+                    <th>Time Visitante</th>
+                    <th>Gols do Time de Casa</th>
+                    <th>Gols do Time Visitante</th>
+                    <th>Data e Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="match : ${matchList}">
+                    <td th:text="${match.homeTeam}"></td>
+                    <td th:text="${match.visitingTeam}"></td>
+                    <td th:text="${match.goalsHomeTeam}"></td>
+                    <td th:text="${match.goalsVisitingTeam}"></td>
+                    <td th:text="${match.dateTime}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    </body>
+</html>

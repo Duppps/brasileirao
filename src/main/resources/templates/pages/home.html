@@ -27,7 +27,7 @@
                 <td th:text="${team.losses}"></td>
                 <td th:text="${team.goalsScored}"></td>
                 <td th:text="${team.goalsConceded}"></td>
-                <td th:text="${team.winPercentage}"></td>
+                <td th:text="${team.matches > 0 ? (team.wins * 100.0) / team.matches : 0}"></td>
             </tr>
         </tbody>
     </table>

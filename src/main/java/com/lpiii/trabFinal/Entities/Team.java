@@ -41,10 +41,38 @@ public class Team {
     private int goalsConceded = 0;
 
     @Column(nullable = false)
-    private double winPercentage = 0;
+    private int matches;
 
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public void addMatches() {
+        this.matches++;
+    }
+
+    public void addWin() {
+        this.wins++;
+    }
+
+    public void addDraw() {
+        this.draws++;
+    }
+
+    public void addLoss() {
+        this.losses++;
+    }
+
+    public void addGoalsScored(int goals){
+        this.goalsScored += goals;
+    }
+
+    public void addGoalsConceded(int goals) {
+        this.goalsConceded += goals;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
     }
 }
