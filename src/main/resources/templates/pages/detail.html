@@ -5,6 +5,13 @@
     </head>
     <body>
     <section layout:fragment="content">
+        <div class="margin-top-10 d-flex">
+            <button onclick="window.location.href = '../teams';">
+                <i class="fa-solid fa-arrow-left margin-end-4"></i>
+                Voltar
+            </button>
+            <span class="title title-center" th:text="'Partidas ' + ${team}"></span>
+        </div>
         <table class="margin-top-10 table">
             <thead>
                 <tr>

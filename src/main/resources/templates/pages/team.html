@@ -5,60 +5,70 @@
     </head>
     <body>
         <section layout:fragment="content">
-            <ul class="horizontal-list margin-top-10">
-                <li>
-                    <button class="btn-create" onClick="openModal('create')">Criar</button>
-                </li>
-                <li>
-                    <button class="btn-delete" onClick="openModal('delete')">Excluir</button>
-                </li>
-            </ul>
+            <div class="margin-top-10 d-flex">
+                <ul class="horizontal-list">
+                    <li>
+                        <button class="btn-create" onClick="openModal('create')">Criar</button>
+                    </li>
+                    <li>
+                        <button class="btn-delete" onClick="openModal('delete')">Excluir</button>
+                    </li>
+                </ul>
+                <span class="title title-center">Times</span>
+            </div>
             <table class="margin-top-10 table">
+                <colgroup>
+                    <col style="width: 5%;">
+                    <col style="width: 24%;">
+                    <col style="width: auto;">
+                    <col style="width: auto;">
+                    <col style="width: auto;">
+                </colgroup>
                 <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" onClick="checkAll()" />
-                    </th>
-                    <th>
-                        Ações
-                    </th>
-                    <th>Nome</th>
-                    <th>Estádio</th>
-                    <th>Cidade</th>
-                </tr>
+                    <tr>
+                        <th style="text-align: center;">
+                            <input type="checkbox" onClick="checkAll()" />
+                        </th>
+                        <th style="text-align: center;">
+                            Ações
+                        </th>
+                        <th>Nome</th>
+                        <th>Estádio</th>
+                        <th>Cidade</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:each="team : ${teamList}">
-                    <td>
-                        <input type="checkbox" th:value="${team.id}" class="checkbox-row" />
-                    </td>
-                    <td>
-                        <button class="btn-edit" th:attr="onclick=|openModal('edit', ${team.id})|">
-                            <i class="fas fa-pencil-alt margin-end-4"></i>
-                            Editar
-                        </button>
-                        <button class="btn-show" th:attr="onclick=|showMatches(${team.id})|">
-                            <i class="fa-solid fa-volleyball margin-end-4"></i>
-                            Ver Partidas
-                        </button>
-                    </td>
-                    <td th:text="${team.name}"></td>
-                    <td th:text="${team.stadium}"></td>
-                    <td th:text="${team.city}"></td>
-                </tr>
+                    <tr th:each="team : ${teamList}">
+                        <td style="text-align: center;">
+                            <input type="checkbox" th:value="${team.id}" class="checkbox-row" />
+                        </td>
+                        <td style="text-align: center;">
+                            <button class="btn-edit" th:attr="onclick=|openModal('edit', ${team.id})|">
+                                <i class="fas fa-pencil-alt margin-end-4"></i>
+                                Editar
+                            </button>
+                            <button class="btn-show" th:attr="onclick=|showMatches(${team.id})|">
+                                <i class="fa-solid fa-volleyball margin-end-4"></i>
+                                Ver Partidas
+                            </button>
+                        </td>
+                        <td th:text="${team.name}"></td>
+                        <td th:text="${team.stadium}"></td>
+                        <td th:text="${team.city}"></td>
+                    </tr>
                 </tbody>
             </table>
             <div id="modal-create" class="modal">
                 <div class="modal-content">
                     <div class="modal-header d-flex">
-                        <span id="modalCreateTitle" class="modal-title">Criar Novo Item</span>
+                        <span id="modalCreateTitle" class="modal-title">Criar novo time</span>
                         <button class="ms-auto close-btn" onClick="closeModal('create')">
                             <i class="fa fa-xmark"></i>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div>
-                            <label for="name_create">Nome:</label><br>
+                            <label for="name_create">Nome</label><br>
                             <input type="text" id="name_create" />
                         </div>
                         <div class="margin-top-5">
@@ -72,27 +82,40 @@
                     </div>
                     <div class="modal-footer margin-top-10 text-end">
                         <button class="btn-save" onClick="createTeam()">Salvar</button>
-                        <button class="btn-delete" onClick="closeModal()">Cancelar</button>
+                        <button class="btn-delete" onClick="closeModal('create')">Cancelar</button>
                     </div>
                 </div>
             </div>
 
             <div id="modal-edit" class="modal">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 id="modalEditTitle">Editar Item</h2>
-                        <button class="close-btn" onClick="closeModal('edit')">&times;</button>
+                    <div class="modal-header d-flex">
+                        <span id="modalEditTitle" class="modal-title">Editar Item</span>
+                        <button class="ms-auto close-btn" onClick="closeModal('edit')">
+                            <i class="fa fa-xmark"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
-                        <label for="id_edit">ID</label>
-                        <input type="text" id="id_edit" readonly />
-                        <label for="name_edit">Nome</label>
-                        <input type="text" id="name_edit" />
-                        <label for="city_edit">Cidade</label>
-                        <input type="text" id="city_edit" />
-                        <label for="stadium_edit">Estádio</label>
-                        <input type="text" id="stadium_edit" />
-                        <button onClick="editTeam()">Salvar</button>
+                        <div>
+                            <label for="id_edit">ID</label>
+                            <input type="text" id="id_edit" readonly />
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="name_edit">Nome</label>
+                            <input type="text" id="name_edit" />
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="city_edit">Cidade</label>
+                            <input type="text" id="city_edit" />
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="stadium_edit">Estádio</label>
+                            <input type="text" id="stadium_edit" />
+                        </div>
+                    </div>
+                    <div class="modal-footer margin-top-10 text-end">
+                        <button class="btn-edit" onClick="editTeam()">Salvar</button>
+                        <button class="btn-delete" onClick="closeModal('edit')">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -100,12 +123,12 @@
             <div id="modal-delete" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 id="modalDeleteTitle"></h2>
+                        <span id="modalDeleteTitle"></span>
                         <input type="text" id="list_id_delete" style="display: none;">
                     </div>
-                    <div class="modal-body">
-                        <button onClick="deleteTeam()">Salvar</button>
-                        <button class="close-btn" onClick="closeModal('delete')"> Cancelar</button>
+                    <div class="modal-footer margin-top-10 text-center">
+                        <button class="btn-delete" onClick="deleteTeam()">Salvar</button>
+                        <button onClick="closeModal('delete')">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -139,7 +162,7 @@
                             const ids = Array.from(rows).map(row => row.value).join(",");
                             listIdDelete.value = ids;
 
-                            document.getElementById("modalDeleteTitle").innerText = `Deseja excluir ${totalItems} item(ns)?`;
+                            document.getElementById("modalDeleteTitle").innerText = `Deseja excluir ${totalItems} ${totalItems === 1 ? 'item' : 'itens'}?`;
                             modal.style.display = "flex";
                         }
                     }

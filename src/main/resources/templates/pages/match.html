@@ -5,14 +5,17 @@
     </head>
     <body>
         <section layout:fragment="content">
-            <ul class="horizontal-list margin-top-10">
-                <li>
-                    <button class="btn-create" onClick="openModal('create')">Criar</button>
-                </li>
-                <li>
-                    <button class="btn-delete" onClick="openModal('delete')">Excluir</button>
-                </li>
-            </ul>
+            <div class="margin-top-10 d-flex">
+                <ul class="horizontal-list">
+                    <li>
+                        <button class="btn-create" onClick="openModal('create')">Criar</button>
+                    </li>
+                    <li>
+                        <button class="btn-delete" onClick="openModal('delete')">Excluir</button>
+                    </li>
+                </ul>
+                <span class="title title-center">Partidas</span>
+            </div>
             <table class="margin-top-10 table">
                 <thead>
                     <tr>
@@ -103,8 +106,8 @@
                         <input type="text" id="list_id_delete" style="display: none;">
                     </div>
                     <div class="modal-body">
-                        <button onClick="deleteTeam()">Salvar</button>
-                        <button class="close-btn" onClick="closeModal('delete')"> Cancelar</button>
+                        <button class="btn-delete" onClick="deleteTeam()">Salvar</button>
+                        <button class="close-btn" onClick="closeModal('delete')">Cancelar</button>
                     </div>
                 </div>
             </div>

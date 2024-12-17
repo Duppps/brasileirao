@@ -17,10 +17,6 @@ ul {
     margin-left: auto;
 }
 
-.flex {
-    display: flex;
-}
-
 .horizontal-list {
     display: flex;
     list-style: none;
@@ -52,15 +48,21 @@ ul {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: auto;
 }
 
-.table th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
 }
 
 .table th {
@@ -195,12 +197,23 @@ button {
     background-color: #3e8e41;
 }
 
+.title-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .d-flex {
     display: flex;
+    align-items: center;
 }
 
 .justify-items-between {
     justify-content: space-between;
+}
+
+.justify-items-center {
+    justify-content: center;
 }
 
 .d-inline {
@@ -229,6 +242,10 @@ button {
 
 .text-end {
     text-align: right;
+}
+
+.text-center {
+    text-align: center;
 }
 
 input {
