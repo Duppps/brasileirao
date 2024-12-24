@@ -53,48 +53,84 @@
             </table>
             <div id="modal-create" class="modal">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 id="modalCreateTitle">Criar Novo Item</h2>
-                        <button class="close-btn" onClick="closeModal('create')">&times;</button>
+                    <div class="modal-header d-flex">
+                        <span id="modalCreateTitle" class="modal-title">Criar nova partida</span>
+                        <button class="ms-auto close-btn" onClick="closeModal('create')">
+                            <i class="fa fa-xmark"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
-                        <label for="home_team_create">Time de Casa</label>
-                        <select id="home_team_create">
-                            <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
-                        </select>
-                        <label for="goals_home_team_create">Gols</label>
-                        <input type="number" id="goals_home_team_create" />
-
-                        <label for="visiting_team_create">Time Visitante</label>
-                        <select id="visiting_team_create">
-                            <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
-                        </select>
-                        <label for="goals_visiting_team_create">Gols</label>
-                        <input type="number" id="goals_visiting_team_create" />
-
-                        <label for="date_create">Gols</label>
-                        <input type="datetime-local" id="date_create" />
-                        <button onClick="createMatch()">Salvar</button>
+                        <div>
+                            <label for="home_team_create">Time de Casa</label><br>
+                            <select id="home_team_create">
+                                <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
+                            </select>
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="goals_home_team_create">Gols</label><br>
+                            <input type="number" id="goals_home_team_create" />
+                        </div>
+                        <div class="margin-top-10 border-top padding-top-10">
+                            <label for="visiting_team_create">Time Visitante</label><br>
+                            <select id="visiting_team_create">
+                                <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
+                            </select>
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="goals_visiting_team_create">Gols</label><br>
+                            <input type="number" id="goals_visiting_team_create" />
+                        </div>
+                        <div class="margin-top-10 border-top padding-top-10">
+                            <label for="date_create">Data</label><br>
+                            <input type="datetime-local" id="date_create" />
+                        </div>
+                    </div>
+                    <div class="modal-footer margin-top-10 text-end">
+                        <button class="btn-save" onClick="createMatch()">Salvar</button>
+                        <button class="btn-delete" onClick="closeModal('create')">Cancelar</button>
                     </div>
                 </div>
             </div>
 
             <div id="modal-edit" class="modal">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 id="modalEditTitle">Editar Item</h2>
-                        <button class="close-btn" onClick="closeModal('edit')">&times;</button>
+                    <div class="modal-header d-flex">
+                        <span id="modalEditTitle" class="modal-title">Editar Partida</span>
+                        <button class="ms-auto close-btn" onClick="closeModal('edit')">
+                            <i class="fa fa-xmark"></i>
+                        </button>
                     </div>
                     <div class="modal-body">
                         <label for="id_edit">ID</label>
                         <input type="text" id="id_edit" readonly />
-                        <label for="name_edit">Nome</label>
-                        <input type="text" id="name_edit" />
-                        <label for="city_edit">Cidade</label>
-                        <input type="text" id="city_edit" />
-                        <label for="stadium_edit">Estádio</label>
-                        <input type="text" id="stadium_edit" />
-                        <button onClick="editTeam()">Salvar</button>
+                        <div class="margin-top-5">
+                            <label for="home_team_edit">Time de Casa</label><br>
+                            <select id="home_team_edit">
+                                <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
+                            </select>
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="goals_home_team_edit">Gols</label><br>
+                            <input type="number" id="goals_home_team_edit" />
+                        </div>
+                        <div class="margin-top-10 border-top padding-top-10">
+                            <label for="visiting_team_edit">Time Visitante</label><br>
+                            <select id="visiting_team_edit">
+                                <option th:each="team : ${teamList}" th:value="${team.id}" th:text="${team.name}"></option>
+                            </select>
+                        </div>
+                        <div class="margin-top-5">
+                            <label for="goals_visiting_team_edit">Gols</label><br>
+                            <input type="number" id="goals_visiting_team_edit" />
+                        </div>
+                        <div class="margin-top-10 border-top padding-top-10">
+                            <label for="date_edit">Data</label><br>
+                            <input type="datetime-local" id="date_edit" />
+                        </div>
+                    </div>
+                    <div class="modal-footer margin-top-10 text-end">
+                        <button class="btn-save" onClick="editMatch()">Salvar</button>
+                        <button class="btn-delete" onClick="closeModal('edit')">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -113,6 +149,8 @@
             </div>
 
             <script th:inline="javascript">
+                const matchData = /*[[${matchList}]]*/ [];
+
                 function openModal(mode, id = null) {
                     if (mode === "create") {
                         const modal = document.getElementById("modal-create");
@@ -146,7 +184,7 @@
                     modal.style.display = "none";
                 }
 
-                async function editTeam() {
+                async function editMatch() {
                     const teamId = document.getElementById("id_edit").value;
                     try {
                         const response = await fetch(`/teams/${teamId}`, {
@@ -240,14 +278,19 @@
                 }
 
                 function getMatch(id) {
-                    const selectedTeam = teamData.find(team => team.id === id);
-                    if (selectedTeam) {
-                        document.getElementById('id_edit').value = selectedTeam.id;
-                        document.getElementById('name_edit').value = selectedTeam.name;
-                        document.getElementById('city_edit').value = selectedTeam.city;
-                        document.getElementById('stadium_edit').value = selectedTeam.stadium;
+                    const selectedMatch = matchData.find(match => match.id === id);
+                    if (selectedMatch) {
+                        document.getElementById('id_edit').value = selectedMatch.id;
+
+                        document.getElementById('home_team_edit').value = selectedMatch.homeTeam.id;
+                        document.getElementById('goals_home_team_edit').value = selectedMatch.goalsHomeTeam;
+
+                        document.getElementById('visiting_team_edit').value = selectedMatch.visitingTeam.id;
+                        document.getElementById('goals_visiting_team_edit').value = selectedMatch.goalsVisitingTeam;
+
+                        document.getElementById('date_edit').value = selectedMatch.dateTime.split(".")[0];
                     } else {
-                        console.error("Time não encontrado com ID:", id);
+                        console.error("Partida não encontrada com ID:", id);
                     }
                 }
             </script>

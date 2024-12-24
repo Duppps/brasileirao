@@ -90,6 +90,13 @@ ul {
     margin-top: 5px;
 }
 
+.padding-top-10 {
+    padding-top: 10px;
+}
+
+.border-top {
+    border-top: 1px solid #dee2e6;
+}
 .modal-body {
     text-align: left;
 }
@@ -266,6 +273,16 @@ input:focus {
 input::placeholder {
     color: #999;
     font-style: italic;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
 @media (min-width: 576px) {
