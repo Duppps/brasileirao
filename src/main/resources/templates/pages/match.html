@@ -142,7 +142,7 @@
                         <input type="text" id="list_id_delete" style="display: none;">
                     </div>
                     <div class="modal-body">
-                        <button class="btn-delete" onClick="deleteTeam()">Salvar</button>
+                        <button class="btn-delete" onClick="deleteMatch()">Salvar</button>
                         <button class="close-btn" onClick="closeModal('delete')">Cancelar</button>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
                             const ids = Array.from(rows).map(row => row.value).join(",");
                             listIdDelete.value = ids;
 
-                            document.getElementById("modalDeleteTitle").innerText = `Deseja excluir ${totalItems} item(ns)?`;
+                            document.getElementById("modalDeleteTitle").innerText = `Deseja excluir ${totalItems} ${totalItems === 1 ? 'item' : 'itens'}?`;
                             modal.style.display = "flex";
                         }
                     }
@@ -185,17 +185,24 @@
                 }
 
                 async function editMatch() {
-                    const teamId = document.getElementById("id_edit").value;
+                    const matchId = document.getElementById("id_edit").value;
+
                     try {
-                        const response = await fetch(`/teams/${teamId}`, {
+                        const response = await fetch(`/matches/${matchId}`, {
                             method: "PUT",
                             headers: {
                                 "Content-Type": "application/json"
                             },
                             body: JSON.stringify({
-                                name: document.getElementById("name_edit").value,
-                                city: document.getElementById("city_edit").value,
-                                stadium: document.getElementById("stadium_edit").value
+                                homeTeam: {
+                                    id: document.getElementById("home_team_edit").value
+                                },
+                                visitingTeam: {
+                                    id: document.getElementById("visiting_team_edit").value
+                                },
+                                goalsHomeTeam: parseInt(document.getElementById("goals_home_team_edit").value, 10),
+                                goalsVisitingTeam: parseInt(document.getElementById("goals_visiting_team_edit").value, 10),
+                                dateTime: document.getElementById("date_edit").value
                             })
                         });
 
@@ -203,10 +210,11 @@
                             closeModal("edit");
                             location.reload();
                         } else {
-                            console.error("Failed to update team", response.status);
+                            const errorText = await response.text();
+                            console.error("Failed to update match:", response.status, errorText);
                         }
                     } catch (error) {
-                        console.error("Error editing team:", error);
+                        console.error("Error editing match:", error);
                     }
                 }
 
@@ -226,7 +234,7 @@
 
                 async function createMatch() {
                     try {
-                        const response = await fetch("/matchs/", {
+                        const response = await fetch("/matches/", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -253,14 +261,14 @@
                     }
                 }
 
-                async function deleteTeam() {
+                async function deleteMatch() {
                     const raw_ids = document.getElementById("list_id_delete").value;
                     const ids = raw_ids.split(",");
                     let status = false;
 
                     for (const id of ids) {
                         try {
-                            const response = await fetch(`/teams/${id}`, {
+                            const response = await fetch(`/matches/${id}`, {
                                 method: "DELETE"
                             });
 
@@ -268,7 +276,7 @@
                                 status = true;
                             }
                         } catch (error) {
-                            console.error("Error deleting team:", error);
+                            console.error("Error deleting match:", error);
                         }
                     }
 

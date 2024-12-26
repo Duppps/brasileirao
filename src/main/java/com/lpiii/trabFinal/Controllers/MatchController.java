@@ -11,17 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Controller
-@RequestMapping("/matchs")
+@RequestMapping("/matches")
 public class MatchController {
     @Autowired
     MatchRepository matchRepository;
@@ -43,6 +39,21 @@ public class MatchController {
         return "pages/match";
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateMatch(@PathVariable Long id, @RequestBody Match matchUpdated) {
+        Match match = matchRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Match not found with id " + id));
+
+        match.setHomeTeam(matchUpdated.getHomeTeam());
+        match.setVisitingTeam(matchUpdated.getVisitingTeam());
+        match.setGoalsHomeTeam(matchUpdated.getGoalsHomeTeam());
+        match.setGoalsVisitingTeam(matchUpdated.getGoalsVisitingTeam());
+        match.setDateTime(matchUpdated.getDateTime());
+
+        matchRepository.save(match);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public ResponseEntity<String> createMatch(@RequestBody MatchDTO matchDTO) {
         try {
@@ -56,5 +67,14 @@ public class MatchController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating match: " + e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteMatch(@PathVariable Long id) {
+        Match match = matchRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Match not found with id " + id));
+
+        matchRepository.delete(match);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
