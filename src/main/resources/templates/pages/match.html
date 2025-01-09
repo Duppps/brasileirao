@@ -194,14 +194,10 @@
                                 "Content-Type": "application/json"
                             },
                             body: JSON.stringify({
-                                homeTeam: {
-                                    id: document.getElementById("home_team_edit").value
-                                },
-                                visitingTeam: {
-                                    id: document.getElementById("visiting_team_edit").value
-                                },
-                                goalsHomeTeam: parseInt(document.getElementById("goals_home_team_edit").value, 10),
-                                goalsVisitingTeam: parseInt(document.getElementById("goals_visiting_team_edit").value, 10),
+                                homeTeamId: document.getElementById("home_team_edit").value,
+                                visitingTeamId: document.getElementById("visiting_team_edit").value,
+                                homeGoals: parseInt(document.getElementById("goals_home_team_edit").value, 10),
+                                visitingGoals: parseInt(document.getElementById("goals_visiting_team_edit").value, 10),
                                 dateTime: document.getElementById("date_edit").value
                             })
                         });
